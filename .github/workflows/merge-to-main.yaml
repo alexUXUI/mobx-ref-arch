@@ -1,0 +1,6 @@
+name: Merge to Main
+
+on:
+  push:
+    branches:
+      - main
