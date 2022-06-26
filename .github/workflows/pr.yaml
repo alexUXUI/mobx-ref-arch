@@ -28,3 +28,24 @@ jobs:
       - name: Install Dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: npm ci
+      - name: Cache the code
+        id: cache-code
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-code
+        with:
+          # caching code
+          path: .
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.js') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+  # create a new build job and use the node_modules and code cache
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: npm run build
