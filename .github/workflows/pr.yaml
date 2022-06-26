@@ -11,6 +11,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Cache node modules
         id: cache-nodemodules
         uses: actions/cache@v2
         env:
@@ -23,5 +25,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+      - name: Install Dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        run: npm install
+        run: npm ci
