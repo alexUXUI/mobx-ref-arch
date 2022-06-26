@@ -60,14 +60,13 @@ export const CreateNote = observer(() => {
         value={author || ""}
         onChange={handleAuthorChange}
       />
-      {/* <button
+      <button
         type="submit"
         onClick={handleAddNote}
         disabled={!title || !content || !author}
       >
         Add note
-      </button> */}
+      </button>
     </form>
   );
 });
-// symbolic change to src file

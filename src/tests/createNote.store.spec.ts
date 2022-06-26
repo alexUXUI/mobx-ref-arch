@@ -1,6 +1,5 @@
 import { CreateNoteStore } from "../stores/createNote.store";
 import { RootStore } from "../stores/root.store";
-import data from "../fixtures/notes.fixtures.json";
 
 const rootStore = new RootStore();
 
