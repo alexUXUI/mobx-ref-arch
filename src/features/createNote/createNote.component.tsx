@@ -70,3 +70,4 @@ export const CreateNote = observer(() => {
     </form>
   );
 });
+// symbolic change to src file
