@@ -1,0 +1,20 @@
+{
+  "notes": [
+    {
+      "id": "ef63b61c-2956-4824-95b0-5294b7798818",
+      "title": "Study Mobx",
+      "content": "Multiple store pattern",
+      "createdAt": "2022-06-26T16:19:34.267Z",
+      "updatedAt": "2022-06-26T16:19:34.267Z",
+      "author": "Alex B"
+    },
+    {
+      "id": "ef63b61c-1234-4824-95b0-5294b7798818",
+      "title": "Study Github Actions",
+      "content": "Multiple jobs in parallel with Github Actions",
+      "createdAt": "2022-06-26T16:19:34.267Z",
+      "updatedAt": "2022-06-26T16:19:34.267Z",
+      "author": "Alex B"
+    }
+  ]
+}

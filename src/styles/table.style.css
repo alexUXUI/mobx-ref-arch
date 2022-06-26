@@ -1,0 +1,22 @@
+/* make table full width */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* align table cells to left */
+table,
+th,
+td {
+  text-align: left;
+}
+
+/* alternate table row colors */
+table tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+/* make the table header white */
+table th {
+  background-color: #d6d6d6;
+}
