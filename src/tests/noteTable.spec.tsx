@@ -1,5 +1,5 @@
 // Test Libs
-import { screen } from "@testing-library/dom";
+import { screen } from "@testing-library/react";
 
 // Test setup
 import { customRender } from "./providers.mocks";
@@ -9,9 +9,9 @@ import { NotesTable } from "../features/notesTable/notesTable.component";
 
 describe("Table test suite", () => {
   it("should render table", () => {
-    const { getByTestId } = customRender(<NotesTable />);
+    customRender(<NotesTable />);
 
-    const table = getByTestId("notes-table");
+    const table = screen.getByTestId("notes-table");
 
     expect(table).toBeInTheDocument();
     expect(table).toBeVisible();

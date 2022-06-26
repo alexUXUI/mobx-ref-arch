@@ -37,7 +37,7 @@ export class NoteStore {
 
   // Mobx action that allows us to add a note to the store
   addNote(note: Note) {
-    const { noteStore, newNoteStore } = this.rootStore;
+    const { newNoteStore } = this.rootStore;
 
     // add a note to the root store
     this.notes.push(note);
