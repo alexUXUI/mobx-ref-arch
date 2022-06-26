@@ -11,6 +11,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+          cache: "npm"
       - run: npm install
 
   build:
@@ -19,11 +23,6 @@ jobs:
       - install
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 14
-          cache: "npm"
       - run: npm run build
 
   lint:
@@ -32,7 +31,6 @@ jobs:
       - install
 
     steps:
-      - uses: actions/checkout@v2
       - run: npm run lint
 
   test:
