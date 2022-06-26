@@ -1,23 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { autorun, makeAutoObservable } from "mobx";
+import { observer } from "mobx-react";
+import "./App.css";
+
+interface ITimer {
+  secondsPassed: number;
+  increase: () => void;
+  reset: () => void;
+}
+
+// Model the application state.
+class Timer {
+  secondsPassed = 0;
+
+  constructor() {
+    makeAutoObservable(this);
+
+    autorun(() => {
+      console.log(`Seconds passed: ${this.secondsPassed}`);
+    });
+  }
+
+  increase() {
+    this.secondsPassed += 1;
+  }
+
+  reset() {
+    this.secondsPassed = 0;
+  }
+}
+
+const myTimer = new Timer();
+
+// UI that uses the observable state.
+const TimerView = observer(({ timer }: { timer: ITimer }) => (
+  <button onClick={() => timer.reset()}>
+    Seconds passed: {timer.secondsPassed}
+  </button>
+));
+
+// Update the 'Seconds passed: X' text every second.
+setInterval(() => {
+  myTimer.increase();
+}, 1000);
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <TimerView timer={myTimer} />
       </header>
     </div>
   );
