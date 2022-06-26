@@ -1,5 +1,5 @@
 // Test Libs
-import { screen } from "@testing-library/dom";
+import { screen } from "@testing-library/react";
 import { fireEvent } from "@testing-library/react";
 
 // Test setup
@@ -10,54 +10,54 @@ import { CreateNote } from "../features/createNote/createNote.component";
 
 describe("Create note test suite", () => {
   it("should render an input form", () => {
-    const { getByTestId } = customRender(<CreateNote />);
+    customRender(<CreateNote />);
 
-    const form = getByTestId("new-note");
+    const form = screen.getByTestId("new-note");
 
     expect(form).toBeInTheDocument();
     expect(form).toBeVisible();
   });
 
   it("should render an input for title", () => {
-    const { getByPlaceholderText } = customRender(<CreateNote />);
+    customRender(<CreateNote />);
 
-    const titleInput = getByPlaceholderText("Title");
+    const titleInput = screen.getByPlaceholderText("Title");
 
     expect(titleInput).toBeInTheDocument();
     expect(titleInput).toBeVisible();
   });
 
   it("should render an input for content", () => {
-    const { getByPlaceholderText } = customRender(<CreateNote />);
+    customRender(<CreateNote />);
 
-    const contentInput = getByPlaceholderText("Content");
+    const contentInput = screen.getByPlaceholderText("Content");
 
     expect(contentInput).toBeInTheDocument();
     expect(contentInput).toBeVisible();
   });
 
   it("should render an input for author", () => {
-    const { getByPlaceholderText } = customRender(<CreateNote />);
+    customRender(<CreateNote />);
 
-    const authorInput = getByPlaceholderText("Author");
+    const authorInput = screen.getByPlaceholderText("Author");
 
     expect(authorInput).toBeInTheDocument();
     expect(authorInput).toBeVisible();
   });
 
   it("should render a button to add a note", () => {
-    const { getByText } = customRender(<CreateNote />);
+    customRender(<CreateNote />);
 
-    const addNoteButton = getByText("Add note");
+    const addNoteButton = screen.getByText("Add note");
 
     expect(addNoteButton).toBeInTheDocument();
     expect(addNoteButton).toBeVisible();
   });
 
   it("should disable the button when the form is invalid", () => {
-    const { getByText } = customRender(<CreateNote />);
+    customRender(<CreateNote />);
 
-    const addNoteButton = getByText("Add note");
+    const addNoteButton = screen.getByText("Add note");
 
     expect(addNoteButton).toBeInTheDocument();
     expect(addNoteButton).toBeVisible();
@@ -65,8 +65,7 @@ describe("Create note test suite", () => {
   });
 
   it("should enable the button when the form is valid", async () => {
-    // arrange: render the component
-    const { debug, container } = customRender(<CreateNote />);
+    customRender(<CreateNote />);
 
     // get a reference to all the input fields and the button
     const titleInput = screen.getByPlaceholderText("Title");
