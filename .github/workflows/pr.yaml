@@ -25,6 +25,7 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+
       - name: Install Dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: npm install
@@ -36,6 +37,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - run: npm run build
         with:
           # caching node_modules
           path: node_modules
@@ -44,7 +47,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - run: npm run build
   # install:
   #   runs-on: ubuntu-latest
 
