@@ -10,9 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Commit
       - uses: actions/checkout@v2
-      - name: Cache or Retrieve Node Modules
       - uses: actions/setup-node@v3
         with:
           node-version: 14
@@ -25,5 +23,4 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Lint Codebase
       - run: npm run lint
