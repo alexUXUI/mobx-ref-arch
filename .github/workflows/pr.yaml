@@ -31,6 +31,7 @@ jobs:
       - install
 
     steps:
+      - uses: actions/checkout@v2
       - run: npm run lint
 
   test:
@@ -39,4 +40,5 @@ jobs:
       - build
 
     steps:
+      - uses: actions/checkout@v2
       - run: npm run test
