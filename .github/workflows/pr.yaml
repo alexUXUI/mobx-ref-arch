@@ -24,7 +24,7 @@ jobs:
           path: node_modules
           # cache key
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          # cache key for cross-branch cache
+          # cache key for cross-branch cache.
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
       - name: Install Dependencies
