@@ -41,7 +41,7 @@ jobs:
         id: cache-nodemodules
         uses: actions/cache@v2
         with:
-          path: node_modules
+          path: central_cache
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -75,7 +75,7 @@ jobs:
       - uses: actions/cache@v2
         id: load-nodemodules-from-cache
         with:
-          path: node_modules
+          path: central_cache
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -106,7 +106,7 @@ jobs:
       # Load node modules from cache
       - uses: actions/cache@v2
         with:
-          path: node_modules
+          path: central_cache
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -122,7 +122,7 @@ jobs:
       # Load node modules from cache or download them
       - uses: actions/cache@v2
         with:
-          path: node_modules
+          path: central_cache
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
