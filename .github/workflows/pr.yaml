@@ -48,9 +48,6 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        shell: bash
-        run: |
-          echo "Cache miss! Downloading node modules"
         run: npm install
 
       - name: Copy Deps Into Central Cache
@@ -72,7 +69,7 @@ jobs:
       - uses: actions/cache@v2
         id: load-nodemodules-from-cache
         with:
-          path: central_cache
+          path: node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
