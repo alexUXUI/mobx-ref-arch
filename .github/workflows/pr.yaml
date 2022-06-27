@@ -131,7 +131,6 @@ jobs:
         # Override language selection by uncommenting this and choosing your languages
         with:
           languages: javascript
-            - uses: actions/checkout@v2
 
       # - name: Cache node modules
       #   id: cache-nodemodules
