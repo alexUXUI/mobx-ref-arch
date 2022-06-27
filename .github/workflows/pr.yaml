@@ -95,15 +95,25 @@ jobs:
       - install
 
     steps:
-      - uses: actions/checkout@v3
-      # Load node modules from cache
-      - uses: actions/cache@v2
+      # Load build from cache
+      - name: Prepare Node Modules
+        id: cache-build
+        uses: actions/cache@v2
         with:
           path: central_cache
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
-      - run: npm run lint
+
+      # Install dependencies if cache miss
+      - name: Install Dependencies
+        if: steps.cache-build.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          echo "Cache miss! Installing dependencies"
+          npm install
+          echo "Linting app"
+          npm run lint
 
   # Unit tests
   Test:
