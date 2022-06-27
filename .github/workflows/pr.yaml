@@ -13,7 +13,7 @@ env:
 
 jobs:
   # Saves execution time on the free tier. Non-blocking.
-  cancelprevious:
+  Cancel-Previous:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
@@ -22,60 +22,76 @@ jobs:
           access_token: ${{ github.token }}
 
   # Loads the node modeules from cache or downloads them
-  install:
+  Install:
     runs-on: ubuntu-latest
 
     steps:
+      # Get the code from github
       - uses: actions/checkout@v3
 
+      # Create Centralized cache for node_modules and build
+      - name: Create Central Cache
+        shell: bash
+        run: |
+          echo "Creating Central Cache"
+          mkdir central_cache
+
+      # Load node modules from cache
       - name: Prepare Node Modules
         id: cache-nodemodules
         uses: actions/cache@v2
-
-        # Load node modules from cache or download them
         with:
-          path: node_modules
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          path: central_cache
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
 
-        # if no cache hit, install deps.
+      # Install dependencies if cache miss
       - name: Install Dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        run: npm install
+        shell: bash
+        run: |
+          echo "Cache miss! Installing dependencies"
+          npm install
+          echo "Copying Dependencies Into Central Cache"
+          cp -r node_modules central_cache
+          ls central_cache
 
   # Building
-  build:
+  Build:
     runs-on: ubuntu-latest
     needs:
       - install
 
     steps:
       - uses: actions/checkout@v3
-      # Load node modules from cache
+
+      # Load node modules and build from cache
       - uses: actions/cache@v2
         id: load-nodemodules-from-cache
         with:
-          path: node_modules
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          path: central_cache
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
+        if: steps.load-nodemodules-from-cache.outputs.cache-hit != 'true'
+        # shell: |
+        #   echo "NO CACHE HIT"
 
-      - uses: actions/cache@v2
-        id: load-build-from-cache
-        with:
-          path: build
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+      # - name: Build
+      # - uses: actions/cache@v3
+      #   id: cache-build
+      # with:
+      #     path: build
+      #     key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-build-${{ env.cache-name }}-
 
-        # if no cache hit, install deps.
-      - name: Install Dependencies
-        if: steps.load-build-from-cache.outputs.cache-hit != 'true'
+      # if: steps.cache-build.outputs.cache-hit != 'true'
       - run: npm run build
 
   # Linting
-  lint:
+  Lint:
     runs-on: ubuntu-latest
     needs:
       - install
@@ -85,14 +101,14 @@ jobs:
       # Load node modules from cache
       - uses: actions/cache@v2
         with:
-          path: node_modules
+          path: central_cache
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
       - run: npm run lint
 
   # Unit tests
-  test:
+  Test:
     runs-on: ubuntu-latest
     needs:
       - build
@@ -101,8 +117,24 @@ jobs:
       # Load node modules from cache or download them
       - uses: actions/cache@v2
         with:
-          path: node_modules
+          path: central_cache
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
       - run: npm run test
+
+  # Artifact:
+  #   # CodeQL runs on ubuntu-latest, windows-latest, and macos-latest
+  #   runs-on: ubuntu-latest
+
+  #   permissions:
+  #     # required for all workflows
+  #     security-events: write
+
+  #     # only required for workflows in private repositories
+  #     actions: read
+  #     contents: read
+
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
