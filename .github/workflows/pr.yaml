@@ -36,7 +36,7 @@ jobs:
           echo "Creating Central Cache"
           mkdir central_cache
 
-      # Load node modules from cache or download them
+      # Load node modules from cache
       - name: Prepare Node Modules
         id: cache-nodemodules
         uses: actions/cache@v2
@@ -46,6 +46,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
 
+      # Install dependencies if cache miss
       - name: Install Dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         shell: bash
@@ -53,11 +54,13 @@ jobs:
           echo "Cache miss! Installing dependencies"
           npm install
 
+      # Copy node modules in cental cache
       - name: Copy Deps Into Central Cache
         shell: bash
         run: |
           echo "Copying Dependencies Into Central Cache"
           cp -r node_modules central_cache
+          ls central_cache
 
   # Building
   Build:
