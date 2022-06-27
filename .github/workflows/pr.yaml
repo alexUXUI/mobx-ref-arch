@@ -30,7 +30,7 @@ jobs:
       - name: Install Dependencies
         # if no cache hit, install deps.
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        run: npm ci
+        run: npm install
 
   build:
     runs-on: ubuntu-latest
