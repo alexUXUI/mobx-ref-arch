@@ -9,7 +9,8 @@ on:
 
 # GH Action ENVS
 env:
-  cache-name: cache-node-modules
+  node-cache-name: cache-node-modules
+  build-chache-name: cache-build
 
 jobs:
   # Saves execution time on the free tier. Non-blocking.
@@ -36,9 +37,9 @@ jobs:
         with:
           path: node_modules
 
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.node-cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-${{ env.node-cache-name }}-
 
         # if no cache hit, install deps.
       - name: Install Dependencies
@@ -59,9 +60,9 @@ jobs:
         id: load-nodemodules-from-cache
         with:
           path: node_modules
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.node-cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-${{ env.node-cache-name }}-
         if: steps.load-nodemodules-from-cache.outputs.cache-hit != 'true'
 
       # - name: Build
@@ -69,9 +70,9 @@ jobs:
       #   id: cache-build
       # with:
       #     path: build
-      #     key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+      #     key: ${{ runner.os }}-build-${{ env.node-cache-name }}-${{ hashFiles('package-lock.json') }}
       #     restore-keys: |
-      #       ${{ runner.os }}-build-${{ env.cache-name }}-
+      #       ${{ runner.os }}-build-${{ env.node-cache-name }}-
 
       # if: steps.cache-build.outputs.cache-hit != 'true'
       - run: npm run build
@@ -88,9 +89,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.node-cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-${{ env.node-cache-name }}-
       - run: npm run lint
 
   # Unit tests
@@ -104,9 +105,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.node-cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-${{ env.node-cache-name }}-
       - run: npm run test
 
   CodeQL:
@@ -137,7 +138,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.node-cache-name }}-${{ hashFiles('**/package-lock.json') }}
           # restore-keys: |
           #   ${{ runner.os }}-build-${{ env.cache-name }}-
 
