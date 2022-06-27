@@ -88,7 +88,7 @@ jobs:
       #       ${{ runner.os }}-build-${{ env.cache-name }}-
 
       # if: steps.cache-build.outputs.cache-hit != 'true'
-      - run: npm run build
+      - run: npm run build && echo "Build Successful"
 
   # Linting
   Lint:
