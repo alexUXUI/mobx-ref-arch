@@ -67,3 +67,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
       - run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          # reading node_modules
+          path: node_modules
+          # cache key
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          # cache key for cross-branch cache
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+      - run: npm run test
