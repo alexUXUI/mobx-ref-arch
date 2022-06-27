@@ -31,15 +31,15 @@ jobs:
       - name: Prepare Node Modules
         id: cache-nodemodules
         uses: actions/cache@v2
-        shell: |
-          echo "Installing node modules..."
-          echo "creating a central cache for node modules and build"
-          echo "cache-name: ${{ env.cache-name }}"
-          mkdir central_cache
+        # shell: |
+        #   echo "Installing node modules..."
+        #   echo "creating a central cache for node modules and build"
+        #   echo "cache-name: ${{ env.cache-name }}"
+        #   mkdir central_cache
 
         # Load node modules from cache or download them
         with:
-          path: central_cache
+          path: node_modules
 
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
@@ -50,7 +50,7 @@ jobs:
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         # shell: |
         #   echo "NO CACHE HIT"
-        run: npm install && cp -r node_modules central_cache
+        run: npm install
 
   # Building
   Build:
@@ -65,7 +65,7 @@ jobs:
       - uses: actions/cache@v2
         id: load-nodemodules-from-cache
         with:
-          path: central_cache
+          path: node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
