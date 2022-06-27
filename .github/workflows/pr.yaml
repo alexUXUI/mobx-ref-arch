@@ -37,7 +37,7 @@ jobs:
       - install
 
     steps:
-      - name: Load node_modules
+      - uses: actions/checkout@v2
       - uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -49,5 +49,4 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - uses: actions/checkout@v2
       - run: npm run build
