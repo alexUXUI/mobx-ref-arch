@@ -32,7 +32,7 @@ jobs:
         shell: bash
       - run: |
           echo "Creating Central Cache"
-          mkdir central_cache
+        # mkdir node_modules
 
       - name: Prepare Node Modules
         id: cache-nodemodules
@@ -51,7 +51,7 @@ jobs:
         # shell: |
         #   echo "NO CACHE HIT"
       - run: npm install
-      # - run: cp -r node_modules central_cache
+      # - run: cp -r node_modules node_modules
 
   # Building
   Build:
@@ -66,7 +66,7 @@ jobs:
       - uses: actions/cache@v2
         id: load-nodemodules-from-cache
         with:
-          path: central_cache
+          path: node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
