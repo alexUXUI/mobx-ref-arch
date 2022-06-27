@@ -28,19 +28,25 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Create Central Cache
+      - name: Shell Ops
         shell: bash
       - run: |
-          echo "Creating Central Cache"
-        # mkdir node_modules
+          echo "SHELL SCRIPT HERE"
+          mkdir central_cache
 
       - name: Prepare Node Modules
         id: cache-nodemodules
         uses: actions/cache@v2
+        #   shell: bash
+        # - run: |
+        #     echo "Installing node modules..."
+        # echo "creating a central cache for node modules and build"
+        # mkdir central_cache
 
         # Load node modules from cache or download them
         with:
           path: node_modules
+
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -50,8 +56,7 @@ jobs:
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         # shell: |
         #   echo "NO CACHE HIT"
-      - run: npm install
-      # - run: cp -r node_modules node_modules
+        run: npm install
 
   # Building
   Build:
@@ -70,13 +75,11 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
-        # if: steps.load-nodemodules-from-cache.outputs.cache-hit != 'true'
+        if: steps.load-nodemodules-from-cache.outputs.cache-hit != 'true'
         # shell: |
         #   echo "NO CACHE HIT"
 
-      # - name: Install
-      - run: npm install
-
+      # - name: Build
       # - uses: actions/cache@v3
       #   id: cache-build
       # with:
@@ -86,7 +89,6 @@ jobs:
       #       ${{ runner.os }}-build-${{ env.cache-name }}-
 
       # if: steps.cache-build.outputs.cache-hit != 'true'
-      # - name: Build
       - run: npm run build
 
   # Linting
