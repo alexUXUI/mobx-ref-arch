@@ -22,12 +22,13 @@ jobs:
         with:
           # caching node_modules
           path: node_modules
+          # cache key
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          # cache key for cross-branch cache
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
       - name: Install Dependencies
+        # if no cache hit, install deps.
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: npm ci
 
@@ -42,9 +43,9 @@ jobs:
         with:
           # reading node_modules
           path: node_modules
+          # cache key
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          # cache key for cross-branch cache
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
       - run: npm run build
