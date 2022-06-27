@@ -49,3 +49,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
       - run: npm run build
+
+  lint:
+    runs-on: ubuntu-latest
+    needs:
+      - install
+
+    steps:
+      - run: echo "Linting..."
