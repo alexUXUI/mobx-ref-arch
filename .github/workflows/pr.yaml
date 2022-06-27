@@ -66,17 +66,28 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # Load node modules and build from cache
-      - uses: actions/cache@v2
-        id: load-nodemodules-from-cache
+      # Load build from cache
+      - name: Prepare Node Modules
+        id: cache-build
+        uses: actions/cache@v2
         with:
           path: central_cache
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
-        if: steps.load-nodemodules-from-cache.outputs.cache-hit != 'true'
-        # shell: |
-        #   echo "NO CACHE HIT"
+
+      # Install dependencies if cache miss
+      - name: Install Dependencies
+        if: steps.cache-build.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          echo "Cache miss! Installing dependencies"
+          npm install
+          echo "Copying Dependencies Into Central Cache"
+          cp -r node_modules central_cache
+          ls central_cache
+          echo "Building App"
+          npm run build
 
       # - name: Build
       # - uses: actions/cache@v3
@@ -86,9 +97,6 @@ jobs:
       #     key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
       #     restore-keys: |
       #       ${{ runner.os }}-build-${{ env.cache-name }}-
-
-      # if: steps.cache-build.outputs.cache-hit != 'true'
-      - run: npm run build && echo "Build Successful"
 
   # Linting
   Lint:
