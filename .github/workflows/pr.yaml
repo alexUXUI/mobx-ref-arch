@@ -9,7 +9,7 @@ env:
   cache-name: cache-node-modules
 
 jobs:
-  install:
+  install 📦:
     runs-on: ubuntu-latest
 
     steps:
