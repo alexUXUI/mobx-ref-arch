@@ -95,6 +95,7 @@ jobs:
       - install
 
     steps:
+      - uses: actions/checkout@v3
       # Load build from cache
       - name: Prepare Node Modules
         id: cache-build
