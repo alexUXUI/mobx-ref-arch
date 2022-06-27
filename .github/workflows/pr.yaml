@@ -132,8 +132,6 @@ jobs:
   # Unit tests
   Test:
     runs-on: ubuntu-latest
-    needs:
-      - build
     steps:
       # Download the code from github
       - uses: actions/checkout@v3
