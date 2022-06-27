@@ -31,12 +31,12 @@ jobs:
       - name: Prepare Node Modules
         id: cache-nodemodules
         uses: actions/cache@v2
-        shell: bash
-      - run: |
-          echo "Installing node modules..."
-          echo "creating a central cache for node modules and build"
-          echo "cache-name: ${{ env.cache-name }}"
-          mkdir central_cache
+        #   shell: bash
+        # - run: |
+        #     echo "Installing node modules..."
+        #     echo "creating a central cache for node modules and build"
+        #     echo "cache-name: ${{ env.cache-name }}"
+        #     mkdir central_cache
 
         # Load node modules from cache or download them
         with:
