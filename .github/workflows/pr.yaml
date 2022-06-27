@@ -143,9 +143,9 @@ jobs:
 
         # - name: Install Dependencies
         # if no cache hit, install deps.
-        if: steps.cache-nodemodules-two.outputs.cache-hit != 'true'
-      - run: npm install
-      - run: npm run build
+      #   if: steps.cache-nodemodules-two.outputs.cache-hit != 'true'
+      # - run: npm install
+      # - run: npm run build
 
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+      # - name: Perform CodeQL Analysis
+      #   uses: github/codeql-action/analyze@v2
