@@ -51,7 +51,7 @@ jobs:
         shell: bash
         run: |
           echo "Cache miss! Installing dependencies"
-        run: npm install
+          npm install
 
       - name: Copy Deps Into Central Cache
         shell: bash
