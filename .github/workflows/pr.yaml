@@ -24,9 +24,8 @@ jobs:
   # Loads the node modeules from cache or downloads them
   Install:
     runs-on: ubuntu-latest
-
     steps:
-      # Get the code from github
+      # Download code from github
       - uses: actions/checkout@v3
 
       # Create Centralized cache for node_modules and build
@@ -64,6 +63,7 @@ jobs:
       - install
 
     steps:
+      # Download the code from github
       - uses: actions/checkout@v3
 
       # Load build from cache
@@ -98,8 +98,10 @@ jobs:
       - install
 
     steps:
+      # Download the code from github
       - uses: actions/checkout@v3
-      # Load build from cache
+
+      # Load node modules from cache
       - name: Read Node Modules From Cache
         id: cache-lint
         uses: actions/cache@v2
@@ -125,7 +127,9 @@ jobs:
     needs:
       - build
     steps:
+      # Download the code from github
       - uses: actions/checkout@v3
+
       # Load node modules from cache or download them
       - name: Read Node Modules From Cache
         id: cache-test
