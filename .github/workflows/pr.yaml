@@ -26,34 +26,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Get the code from github
       - uses: actions/checkout@v3
 
-      - name: Shell Ops
+      # Create Centralized cache for node_modules and build
+      - name: Create Central Cache
         shell: bash
         run: |
-          echo "SHELL SCRIPT HERE"
-      # mkdir central_cache
+          echo "Creating Central Cache"
+          mkdir central_cache
+
+      # Load node modules from cache or download them
       - name: Prepare Node Modules
         id: cache-nodemodules
         uses: actions/cache@v2
-        #   shell: bash
-        # - run: |
-        #     echo "Installing node modules..."
-        # echo "creating a central cache for node modules and build"
-        # mkdir central_cache
-
-        # Load node modules from cache or download them
         with:
           path: node_modules
-
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
-        # if no cache hit, install deps.
       - name: Install Dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        # shell: |
-        #   echo "NO CACHE HIT"
         run: npm install
 
   # Building
