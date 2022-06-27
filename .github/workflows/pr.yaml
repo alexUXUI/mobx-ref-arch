@@ -50,7 +50,8 @@ jobs:
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         # shell: |
         #   echo "NO CACHE HIT"
-        run: npm install && cp -r node_modules central_cache
+      - run: npm install
+      # - run: cp -r node_modules central_cache
 
   # Building
   Build:
@@ -69,11 +70,11 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
-        if: steps.load-nodemodules-from-cache.outputs.cache-hit != 'true'
-        shell: |
-          echo "NO CACHE HIT"
+        # if: steps.load-nodemodules-from-cache.outputs.cache-hit != 'true'
+        # shell: |
+        #   echo "NO CACHE HIT"
 
-      - name: Install
+      # - name: Install
       - run: npm install
 
       # - uses: actions/cache@v3
@@ -85,7 +86,7 @@ jobs:
       #       ${{ runner.os }}-build-${{ env.cache-name }}-
 
       # if: steps.cache-build.outputs.cache-hit != 'true'
-      - name: Build
+      # - name: Build
       - run: npm run build
 
   # Linting
