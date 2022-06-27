@@ -32,7 +32,7 @@ jobs:
         id: cache-nodemodules
         uses: actions/cache@v2
         shell: bash
-      - run:
+      - run: |
           echo "Installing node modules..."
           echo "creating a central cache for node modules and build"
           echo "cache-name: ${{ env.cache-name }}"
