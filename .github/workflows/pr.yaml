@@ -133,21 +133,21 @@ jobs:
           languages: javascript, typescript
 
       - name: Cache node modules
-        id: cache-nodemodules
+        id: cache-nodemodules-2
         uses: actions/cache@v2
 
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+      #   with:
+      #     path: node_modules
+      #     key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-build-${{ env.cache-name }}-
 
-        # - name: Install Dependencies
-        # if no cache hit, install deps.
-        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        run: npm install
+      #   # - name: Install Dependencies
+      #   # if no cache hit, install deps.
+      #   if: steps.cache-nodemodules.outputs.cache-hit != 'true'
+      #   run: npm install
 
-      - run: npm run build
+      # - run: npm run build
 
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+      # - name: Perform CodeQL Analysis
+      #   uses: github/codeql-action/analyze@v2
