@@ -1,4 +1,4 @@
-# Workflow name
+# Workflow name (symbolic change)
 name: Pull Request
 
 # Events to trigger this workflow.
