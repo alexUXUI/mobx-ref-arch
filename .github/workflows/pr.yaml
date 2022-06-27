@@ -71,7 +71,7 @@ jobs:
 
       # Load node modules from cache
       - name: Prepare Node Modules
-        id: cache-nodemodules
+        id: cache-nodemodules-two
         uses: actions/cache@v2
         with:
           path: |
@@ -80,6 +80,17 @@ jobs:
           # Cache key for node_modules
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+
+      # Install dependencies if cache miss
+      - name: Install Dependencies
+        if: steps.cache-nodemodules-two.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          echo "Cache miss! Installing dependencies"
+          npm install
+          echo "Copying Dependencies Into Central Cache"
+          cp -r node_modules central_cache
+          ls central_cache
 
       # Load build from cache
       - name: Read Build From Cache
