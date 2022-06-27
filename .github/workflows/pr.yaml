@@ -72,6 +72,7 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
+
       # Install dependencies if cache miss
       - name: Install Dependencies
         if: steps.cache-build.outputs.cache-hit != 'true'
@@ -79,19 +80,13 @@ jobs:
         run: |
           echo "Cache miss! Installing dependencies"
           npm install
-          echo "Copying Dependencies Into Central Cache"
+          echo "Copying Dependencies into Central Cache"
           cp -r node_modules central_cache
           ls central_cache
           echo "Building App"
           npm run build
-      # - name: Build
-      # - uses: actions/cache@v3
-      #   id: cache-build
-      # with:
-      #     path: build
-      #     key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-build-${{ env.cache-name }}-
+          echo "Copying Build into Central Cache"
+          cp -r build central_cache
 
   # Linting
   Lint:
