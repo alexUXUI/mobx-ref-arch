@@ -53,11 +53,6 @@ jobs:
         run: |
           echo "Cache miss! Installing dependencies"
           npm install
-
-      # Copy node modules in cental cache
-      - name: Copy Deps Into Central Cache
-        shell: bash
-        run: |
           echo "Copying Dependencies Into Central Cache"
           cp -r node_modules central_cache
           ls central_cache
