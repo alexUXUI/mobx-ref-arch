@@ -111,12 +111,20 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
 
       # Install dependencies if cache miss
-      - name: Run Lint
+      - name: NPX Run Lint
         if: steps.cache-lint.outputs.cache-hit != 'true'
         shell: bash
         run: |
           echo "Cache miss! Linting App"
           npx eslint src/ --fix
+
+      # Install dependencies if cache miss
+      - name: Run Lint
+        if: steps.cache-lint.outputs.cache-hit == 'true'
+        shell: bash
+        run: |
+          echo "Cache hit! Linting App"
+          npm run lint
 
   # Unit tests
   Test:
