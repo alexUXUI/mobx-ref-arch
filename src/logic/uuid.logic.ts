@@ -9,3 +9,5 @@ export function uuidv4() {
   );
   return value;
 }
+
+export const add = (a: number, b: number) => a + b;
