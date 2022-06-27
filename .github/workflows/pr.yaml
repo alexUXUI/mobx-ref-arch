@@ -57,7 +57,7 @@ jobs:
           npm install
           echo "Copying Dependencies Into Central Cache"
           cp -r node_modules central_cache
-          ls central_cache
+          ls central_cache/node_modules/
 
   # Building
   Build:
@@ -88,9 +88,6 @@ jobs:
         run: |
           echo "Cache miss! Installing dependencies"
           npm install
-          echo "Copying Dependencies Into Central Cache"
-          cp -r node_modules central_cache
-          ls central_cache
 
       # Load build from cache
       - name: Read Build From Cache
@@ -110,8 +107,17 @@ jobs:
         run: |
           echo "Cache miss! Building App"
           npm run build
-          echo "Copying Build into Central Cache"
+
+      # copy files into central cache
+      - name: Copy Files into Central Cache
+        shell: bash
+        run: |
+          echo "Copying Dependencies Into Central Cache"
+          cp -r node_modules central_cache
+          ls central_cache
+          echo "Copying build Into Central Cache"
           cp -r build central_cache
+          ls central_cache
 
   # # Linting
   # Lint:
