@@ -85,12 +85,7 @@ jobs:
         if: steps.cache-build.outputs.cache-hit != 'true'
         shell: bash
         run: |
-          echo "Cache miss! Installing dependencies"
-          npm install
-          echo "Copying Dependencies into Central Cache"
-          cp -r node_modules central_cache
-          ls central_cache
-          echo "Building App"
+          echo "Cache miss! Building App"
           npm run build
           echo "Copying Build into Central Cache"
           cp -r build central_cache
@@ -120,10 +115,8 @@ jobs:
         if: steps.cache-lint.outputs.cache-hit != 'true'
         shell: bash
         run: |
-          echo "Cache miss! Installing dependencies"
-          npm install
-          echo "Linting app"
-          npm run lint
+          echo "Cache miss! Linting App"
+          npx eslint src/ --fix
 
   # Unit tests
   Test:
