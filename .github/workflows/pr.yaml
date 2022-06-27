@@ -41,16 +41,16 @@ jobs:
         id: cache-nodemodules
         uses: actions/cache@v2
         with:
-          path: central_cache
+          path: node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
 
       - name: Install Dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        shell: bash
-        run: |
-          echo "Cache miss! Installing dependencies"
+        # shell: bash
+        # run: |
+        #   echo "Cache miss! Installing dependencies"
         run: npm install
 
       - name: Copy Deps Into Central Cache
