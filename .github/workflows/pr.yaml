@@ -42,6 +42,7 @@ jobs:
         with:
           path: |
             central_cache/node_modules
+            central_cache/build
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -106,6 +107,7 @@ jobs:
         with:
           path: |
             central_cache/node_modules
+            central_cache/build
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
