@@ -45,10 +45,8 @@ jobs:
             central_cache/node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
           # Cache key for node_modules
-          # Cache key for build
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-            ${{ runner.os }}-build-${{ env.cache-build }}-${{ hashFiles('**/src/**') }}
 
       # Install dependencies if cache miss
       - name: Install Dependencies
@@ -62,36 +60,47 @@ jobs:
           ls central_cache
 
   # Building
-  # Build:
-  #   runs-on: ubuntu-latest
-  #   needs:
-  #     - install
+  Build:
+    runs-on: ubuntu-latest
+    needs:
+      - install
 
-  #   steps:
-  #     # Download the code from github
-  #     - uses: actions/checkout@v3
+    steps:
+      # Download the code from github
+      - uses: actions/checkout@v3
 
-  #     # Load build from cache
-  #     - name: Read Build From Cache
-  #       id: cache-build
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: |
-  #           central_cache/node_modules
-  #           central_cache/build
-  #         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-build-${{ env.cache-name }}-
+      # Load node modules from cache
+      - name: Prepare Node Modules
+        id: cache-nodemodules
+        uses: actions/cache@v2
+        with:
+          path: |
+            central_cache/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          # Cache key for node_modules
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
 
-  #     # Install dependencies if cache miss
-  #     - name: Make Fresh Build
-  #       if: steps.cache-build.outputs.cache-hit != 'true'
-  #       shell: bash
-  #       run: |
-  #         echo "Cache miss! Building App"
-  #         npm run build
-  #         echo "Copying Build into Central Cache"
-  #         cp -r build central_cache
+      # Load build from cache
+      - name: Read Build From Cache
+        id: cache-build
+        uses: actions/cache@v2
+        with:
+          path: |
+            central_cache/build
+          key: ${{ runner.os }}-build-${{ env.cache-build }}-${{ hashFiles('**/src/**') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-build }}-
+
+      # Install dependencies if cache miss
+      - name: Make Fresh Build
+        if: steps.cache-build.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          echo "Cache miss! Building App"
+          npm run build
+          echo "Copying Build into Central Cache"
+          cp -r build central_cache
 
   # # Linting
   # Lint:
