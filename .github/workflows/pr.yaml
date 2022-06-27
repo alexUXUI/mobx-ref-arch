@@ -111,12 +111,7 @@ jobs:
           echo "Cache miss! Installing dependencies"
           npm install
           echo "Cache miss! Building App"
-          npm run build
-
-      # copy files into central cache
-      - name: Copy Files into Central Cache
-        shell: bash
-        run: |
+          npm run 
           echo "Copying build Into Central Cache"
           cp -r build central_cache
           ls central_cache
