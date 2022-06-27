@@ -48,8 +48,8 @@ jobs:
         # if no cache hit, install deps.
       - name: Install Dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        shell: |
-          echo "NO CACHE HIT"
+        # shell: |
+        #   echo "NO CACHE HIT"
         run: npm install && cp -r node_modules central_cache
 
   # Building
@@ -70,8 +70,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
         if: steps.load-nodemodules-from-cache.outputs.cache-hit != 'true'
-        shell: |
-          echo "NO CACHE HIT"
+        # shell: |
+        #   echo "NO CACHE HIT"
 
       # - name: Build
       # - uses: actions/cache@v3
@@ -118,18 +118,18 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
       - run: npm run test
 
-  Artifact:
-    # CodeQL runs on ubuntu-latest, windows-latest, and macos-latest
-    runs-on: ubuntu-latest
+  # Artifact:
+  #   # CodeQL runs on ubuntu-latest, windows-latest, and macos-latest
+  #   runs-on: ubuntu-latest
 
-    permissions:
-      # required for all workflows
-      security-events: write
+  #   permissions:
+  #     # required for all workflows
+  #     security-events: write
 
-      # only required for workflows in private repositories
-      actions: read
-      contents: read
+  #     # only required for workflows in private repositories
+  #     actions: read
+  #     contents: read
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
