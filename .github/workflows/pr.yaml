@@ -91,41 +91,41 @@ jobs:
           cp -r build central_cache
 
   # Linting
-  Lint:
-    runs-on: ubuntu-latest
-    needs:
-      - install
+  # Lint:
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - install
 
-    steps:
-      # Download the code from github
-      - uses: actions/checkout@v3
+  #   steps:
+  #     # Download the code from github
+  #     - uses: actions/checkout@v3
 
-      # Load node modules from cache
-      - name: Read Node Modules From Cache
-        id: cache-lint
-        uses: actions/cache@v2
-        with:
-          path: |
-            central_cache/node_modules
-            central_cache/build
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+  #     # Load node modules from cache
+  #     - name: Read Node Modules From Cache
+  #       id: cache-lint
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: |
+  #           central_cache/node_modules
+  #           central_cache/build
+  #         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-build-${{ env.cache-name }}-
 
-      # Install dependencies if cache miss
-      - name: NPX Run Lint
-        if: steps.cache-lint.outputs.cache-hit != 'true'
-        shell: bash
-        run: |
-          echo "Cache miss! Linting App"
-          npm install && npm run lint
+  #     # Install dependencies if cache miss
+  #     - name: NPX Run Lint
+  #       if: steps.cache-lint.outputs.cache-hit != 'true'
+  #       shell: bash
+  #       run: |
+  #         echo "Cache miss! Linting App"
+  #         npm install && npm run lint
 
-      # Run lint using cached deps
-      - name: Run Lint
-        if: steps.cache-lint.outputs.cache-hit == 'true'
-        shell: bash
-        run: |
-          npm run lint
+  #     # Run lint using cached deps
+  #     - name: Run Lint
+  #       if: steps.cache-lint.outputs.cache-hit == 'true'
+  #       shell: bash
+  #       run: |
+  #         npm run lint
 
   # Unit tests
   Test:
