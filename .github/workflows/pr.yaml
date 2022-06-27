@@ -105,7 +105,9 @@ jobs:
         id: cache-lint
         uses: actions/cache@v2
         with:
-          path: central_cache
+          path: |
+            central_cache/node_modules
+            central_cache/build
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -140,7 +142,9 @@ jobs:
         id: cache-test
         uses: actions/cache@v2
         with:
-          path: central_cache
+          path: |
+            central_cache/node_modules
+            central_cache/build
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
