@@ -125,7 +125,6 @@ jobs:
         if: steps.cache-lint.outputs.cache-hit == 'true'
         shell: bash
         run: |
-          npm install eslint
           npm run lint
 
   # Unit tests
