@@ -1,4 +1,4 @@
-# Workflow name yo
+# Workflow name
 name: Pull Request Workflow
 
 # Events to trigger this workflow.
