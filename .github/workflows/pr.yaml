@@ -63,8 +63,7 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
-      # - name: Building Fresh Build
-      #   if: steps.load-code-from-cache.outputs.cache-hit != 'true'
+        if: steps.load-code-from-cache.outputs.cache-hit != 'true'
       - run: npm run build
 
   # Linting
