@@ -33,7 +33,6 @@ jobs:
       - run: |
           echo "SHELL SCRIPT HERE"
         # mkdir central_cache
-
       - name: Prepare Node Modules
         id: cache-nodemodules
         uses: actions/cache@v2
@@ -50,7 +49,6 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
-
         # if no cache hit, install deps.
       - name: Install Dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
