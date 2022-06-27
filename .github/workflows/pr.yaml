@@ -117,7 +117,7 @@ jobs:
         shell: bash
         run: |
           echo "Cache miss! Linting App"
-          npx eslint src/ --fix
+          npm install && npm run lint
 
       # Run lint using cached deps
       - name: Run Lint
