@@ -98,7 +98,7 @@ jobs:
       - uses: actions/checkout@v3
       # Load build from cache
       - name: Prepare Node Modules
-        id: cache-build
+        id: cache-lint
         uses: actions/cache@v2
         with:
           path: central_cache
@@ -108,7 +108,7 @@ jobs:
 
       # Install dependencies if cache miss
       - name: Install Dependencies
-        if: steps.cache-build.outputs.cache-hit != 'true'
+        if: steps.cache-lint.outputs.cache-hit != 'true'
         shell: bash
         run: |
           echo "Cache miss! Installing dependencies"
@@ -124,13 +124,24 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       # Load node modules from cache or download them
-      - uses: actions/cache@v2
+      - name: Prepare Node Modules
+        id: cache-test
+        uses: actions/cache@v2
         with:
           path: central_cache
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
-      - run: npm run test
+
+      # Install dependencies if cache miss
+      - name: Install Dependencies
+        if: steps.cache-test.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          echo "Cache miss! Installing dependencies"
+          npm install
+          echo "Testing app"
+          npm run test
 
   # Artifact:
   #   # CodeQL runs on ubuntu-latest, windows-latest, and macos-latest
