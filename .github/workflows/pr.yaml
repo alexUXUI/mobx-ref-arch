@@ -64,11 +64,11 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
         if: steps.load-nodemodules-from-cache.outputs.cache-hit != 'true'
 
-      - name: Build
+      # - name: Build
       - uses: actions/cache@v3
         id: cache-build
       with:
-          path: node_modules
+          path: build
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
