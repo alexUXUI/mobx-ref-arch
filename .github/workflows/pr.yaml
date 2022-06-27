@@ -35,6 +35,7 @@ jobs:
         # Load node modules from cache or download them
         with:
           path: node_modules
+
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -55,15 +56,24 @@ jobs:
 
       # Load node modules and build from cache
       - uses: actions/cache@v2
-        id: load-code-from-cache
+        id: load-nodemodules-from-cache
         with:
-          path: |
-            node_modules
-            build
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('src/**') }}
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
-        if: steps.load-code-from-cache.outputs.cache-hit != 'true'
+        if: steps.load-nodemodules-from-cache.outputs.cache-hit != 'true'
+
+      - name: Build
+      - uses: actions/cache@v3
+        id: cache-build
+      with:
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+        
+      if: steps.cache-build.outputs.cache-hit != 'true'
       - run: npm run build
 
   # Linting
