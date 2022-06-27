@@ -58,7 +58,9 @@ jobs:
       - uses: actions/cache@v2
         id: load-nodemodules-from-cache
         with:
-          path: node_modules
+          path: |
+            node_modules
+            build
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -130,7 +132,7 @@ jobs:
         uses: github/codeql-action/init@v2
         # Override language selection by uncommenting this and choosing your languages
         with:
-          languages: javascript
+          languages: javascript, typescript
 
       # - name: Cache node modules
       #   id: cache-nodemodules
