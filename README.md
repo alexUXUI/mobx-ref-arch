@@ -1,4 +1,4 @@
-# Practiving with Mobx and GH Actions
+# Practicing with Mobx and GH Actions
 
 <img width="1009" alt="Screen Shot 2022-06-26 at 6 18 48 PM" src="https://user-images.githubusercontent.com/9002289/175839876-f9f3581a-e2d4-403a-a2f1-85cd55663d02.png">
 
