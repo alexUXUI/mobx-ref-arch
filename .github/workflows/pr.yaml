@@ -107,7 +107,6 @@ jobs:
         with:
           path: |
             central_cache/node_modules
-            central_cache/build
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -120,18 +119,17 @@ jobs:
           echo "Cache miss! Linting App"
           npx eslint src/ --fix
 
-      # Install dependencies if cache miss
+      # Run lint using cached deps
       - name: Run Lint
         if: steps.cache-lint.outputs.cache-hit == 'true'
         shell: bash
-        run: |
-          echo "Cache hit! Linting App"
-          npm install eslint eslint-config-react-app
-          eslint src/ --fix
+        run: npm run lint
 
   # Unit tests
   Test:
     runs-on: ubuntu-latest
+    needs:
+      - install
     steps:
       # Download the code from github
       - uses: actions/checkout@v3
