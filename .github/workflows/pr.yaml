@@ -108,6 +108,8 @@ jobs:
         if: steps.cache-build.outputs.cache-hit != 'true'
         shell: bash
         run: |
+          echo "Cache miss! Installing dependencies"
+          npm install
           echo "Cache miss! Building App"
           npm run build
 
