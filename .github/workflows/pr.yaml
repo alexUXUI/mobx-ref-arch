@@ -126,7 +126,7 @@ jobs:
         shell: bash
         run: |
           echo "Cache hit! Linting App"
-          npm run lint
+          npx eslint src/ --fix
 
   # Unit tests
   Test:
