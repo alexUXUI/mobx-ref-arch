@@ -78,16 +78,5 @@ jobs:
           workload_identity_provider: "projects/667117874450/locations/global/workloadIdentityPools/gh-pool/providers/github"
           service_account: "gh-oidc@ps-ref-arch.iam.gserviceaccount.com"
 
-  # permissions:
-  #   contents: "read"
-  #   id-token: "write"
-
-  # steps:
-  #   - id: "auth"
-  #   - uses: "google-github-actions/auth@v0.4.0"
-  #     with:
-  #       workload_identity_provider: "projects/667117874450/locations/global/workloadIdentityPools/gh-pool/providers/github"
-  #       service_account: "gh-oidc@ps-ref-arch.iam.gserviceaccount.com"
-
-  #   - name: "Use gcloud CLI"
-  #     run: "gcloud info"
+      - name: "Use gcloud CLI"
+        run: "gcloud info"
