@@ -92,9 +92,9 @@ jobs:
         id: restore-caches
 
       - name: "Upload to GCP"
-        shell: bash
-        run: ls -la
-      # - uses: "google-github-actions/upload-cloud-storage@v0"
-      #   with:
-      #     path: ./build
-      #     destination: "ps-ref-arch-web-client/"
+        # shell: bash
+        # run: ls -la
+      - uses: "google-github-actions/upload-cloud-storage@v0"
+        with:
+          path: ./build
+          destination: "ps-ref-arch-web-client/"
