@@ -87,8 +87,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: ./.github/actions/deps-restore
       - uses: ./.github/actions/build-restore
+        run: ls -la
       - uses: "google-github-actions/upload-cloud-storage@v0"
         with:
-          path: "build"
+          path: ./build
           destination: "ps-ref-arch-web-client/"
