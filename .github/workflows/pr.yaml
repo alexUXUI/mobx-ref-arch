@@ -30,15 +30,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/deps-restore
       - run: yarn lint
-  
-  Lint-Styles:
-    needs: Install
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/deps-restore
-      - run: yarn lint:styles
 
   Test:
     needs: Install
