@@ -66,8 +66,11 @@ jobs:
           name: ${{ env.GITHUB_REPOSITORY }}-${{ env.GITHUB_REF }}-${{ env.GITHUB_SHA }}
           path: build
 
-  # GCP-Upload:
-  #   runs-on: ubuntu-latest
+  GCP-Authenticate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "hello world"
 
   # permissions:
   #   contents: "read"
