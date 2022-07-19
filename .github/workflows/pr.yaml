@@ -87,6 +87,8 @@ jobs:
           path: ./build
           destination: "ps-ref-arch-web-client/"
 
+      - run: ls -la /home/runner/work/
+
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
