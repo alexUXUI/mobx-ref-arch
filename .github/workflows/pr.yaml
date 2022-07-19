@@ -81,7 +81,7 @@ jobs:
         with:
           workload_identity_provider: "projects/667117874450/locations/global/workloadIdentityPools/gh-pool/providers/github"
           service_account: "gh-oidc@ps-ref-arch.iam.gserviceaccount.com"
-      - uses: "google-github-actions/upload-cloud-storage@v0"
-        with:
-          path: ./build
-          destination: "ps-ref-arch-web-client/"
+      # - uses: "google-github-actions/upload-cloud-storage@v0"
+      #   with:
+      #     path: ./build
+      #     destination: "ps-ref-arch-web-client/"
