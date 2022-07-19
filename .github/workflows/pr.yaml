@@ -1,159 +1,87 @@
-# Workflow name (symbolic change)
-name: Pull Request
+name: PR Workflow CI
 
-# Events to trigger this workflow.
-on:
-  pull_request:
-    branches:
-      - main
-
-# GH Action ENVS
-env:
-  cache-name: cache-node-modules
+on: pull_request
 
 jobs:
-  # Saves execution time on the free tier. Non-blocking.
   Cancel-Previous:
     runs-on: ubuntu-latest
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.1
+      - uses: styfle/cancel-workflow-action@0.9.1
         with:
           access_token: ${{ github.token }}
 
-  # Loads the node modeules from cache or downloads them
   Install:
     runs-on: ubuntu-latest
-    steps:
-      # Download code from github
-      - uses: actions/checkout@v3
-
-      # Create Centralized cache for node_modules and build
-      - name: Create Central Cache
-        shell: bash
-        run: |
-          echo "Creating Central Cache"
-          mkdir central_cache
-
-      # Load node modules from cache
-      - name: Prepare Node Modules
-        id: cache-nodemodules
-        uses: actions/cache@v2
-        with:
-          path: |
-            central_cache/node_modules
-            central_cache/build
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-
-      # Install dependencies if cache miss
-      - name: Install Dependencies
-        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        shell: bash
-        run: |
-          echo "Cache miss! Installing dependencies"
-          npm install
-          echo "Copying Dependencies Into Central Cache"
-          cp -r node_modules central_cache
-          ls central_cache
-
-  # Building
-  Build:
-    runs-on: ubuntu-latest
-    needs:
-      - install
 
     steps:
-      # Download the code from github
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deps-restore
+        id: cache-node-modules
 
-      # Load build from cache
-      - name: Read Build From Cache
-        id: cache-build
-        uses: actions/cache@v2
-        with:
-          path: |
-            central_cache/node_modules
-            central_cache/build
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+      - name: Download dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: yarn install --immutable
 
-      # Install dependencies if cache miss
-      - name: Make Fresh Build
-        if: steps.cache-build.outputs.cache-hit != 'true'
-        shell: bash
-        run: |
-          echo "Cache miss! Building App"
-          npm run build
-          echo "Copying Build into Central Cache"
-          cp -r build central_cache
-
-  # Linting
   Lint:
+    needs: Install
     runs-on: ubuntu-latest
-    needs:
-      - install
 
     steps:
-      # Download the code from github
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deps-restore
+      - run: yarn lint
 
-      # Load node modules from cache
-      - name: Read Node Modules From Cache
-        id: cache-lint
-        uses: actions/cache@v2
-        with:
-          path: |
-            central_cache/node_modules
-            central_cache/build
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-
-  #     # Install dependencies if cache miss
-  #     - name: NPX Run Lint
-  #       if: steps.cache-lint.outputs.cache-hit != 'true'
-  #       shell: bash
-  #       run: |
-  #         echo "Cache miss! Linting App"
-  #         npm install && npm run lint
-
-  #     # Run lint using cached deps
-  #     - name: Run Lint
-  #       if: steps.cache-lint.outputs.cache-hit == 'true'
-  #       shell: bash
-  #       run: |
-  #         npm run lint
-
-  # Unit tests
   Test:
+    needs: Install
     runs-on: ubuntu-latest
-    needs:
-      - install
+
     steps:
-      # Download the code from github
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deps-restore
+      - run: yarn test
 
-      # Load node modules from cache or download them
-      - name: Read Node Modules From Cache
-        id: cache-test
-        uses: actions/cache@v2
+  Build:
+    needs: Install
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deps-restore
+      - uses: ./.github/actions/build-restore
+        id: cache-build
+
+      - name: Create New Build
+        if: steps.cache-build.outputs.cache-hit != 'true'
+        run: yarn build
+
+  Upload-Artifact:
+    needs: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/build-restore
+      - uses: actions/upload-artifact@v3
         with:
-          path: |
-            central_cache/node_modules
-            central_cache/build
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/src/**') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+          name: ${{ env.GITHUB_REPOSITORY }}-${{ env.GITHUB_REF }}-${{ env.GITHUB_SHA }}
+          path: build
 
-      # Install dependencies if cache miss
-      - name: Run Tests
-        if: steps.cache-test.outputs.cache-hit != 'true'
-        shell: bash
-        run: |
-          echo "Cache miss! Installing dependencies"
-          npm install
-          echo "Testing app"
-          npm run test
+  GCP-Upload:
+    needs: [Build, GCP-Authenticate]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deps-restore
+      - uses: ./.github/actions/build-restore
+      - uses: "google-github-actions/auth@v0"
+        with:
+          workload_identity_provider: "projects/667117874450/locations/global/workloadIdentityPools/gh-pool/providers/github"
+          service_account: "gh-oidc@ps-ref-arch.iam.gserviceaccount.com"
+      - uses: "google-github-actions/upload-cloud-storage@v0"
+        with:
+          path: ./build
+          destination: "ps-ref-arch-web-client/"
