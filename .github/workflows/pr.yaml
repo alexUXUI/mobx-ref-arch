@@ -87,7 +87,7 @@ jobs:
           path: ./build
           destination: "ps-ref-arch-web-client/"
 
-      - run: ls -la /home/runner/work/mobx-ref-arch
+      - run: ls -la /home/runner/work/mobx-ref-arch/mobx-ref-arch
 
       - name: Dump GitHub context
         env:
