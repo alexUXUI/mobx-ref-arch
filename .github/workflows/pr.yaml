@@ -79,13 +79,13 @@ jobs:
       - uses: ./.github/actions/build-restore
       - uses: "google-github-actions/auth@v0"
         with:
-          workload_identity_provider: "projects/667117874450/locations/global/workloadIdentityPools/gh-pool/providers/github"
-          service_account: "gh-oidc@ps-ref-arch.iam.gserviceaccount.com"
+          workload_identity_provider: "projects/898382577948/locations/global/workloadIdentityPools/github-pool/providers/github"
+          service_account: "frontend-gh-ci@backend-336511.iam.gserviceaccount.com"
       - run: echo process.env
       - uses: "google-github-actions/upload-cloud-storage@v0"
         with:
           path: ./build
-          destination: "ps-ref-arch-web-client/"
+          destination: "test.productscience.app"
 
       - run: ls -la /home/runner/work/mobx-ref-arch/mobx-ref-arch
       - run: echo "hello world"
