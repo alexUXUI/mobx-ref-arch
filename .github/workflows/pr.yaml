@@ -54,18 +54,20 @@ jobs:
         if: steps.cache-build.outputs.cache-hit != 'true'
         run: yarn build
 
-  Upload-Artifact:
-    needs: Build
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-restore
+      - name: Upload Build Artifact
       - run: ls -la
       - uses: actions/upload-artifact@v3
         with:
           name: "build-artifact"
           path: build/
+
+  Download-Artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+      - name: Display structure of downloaded files
+        run: ls -R
 
   GCP-Upload:
     needs: Build
