@@ -61,10 +61,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/build-restore
+      - run: ls -la
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.GITHUB_REPOSITORY }}-${{ env.GITHUB_REF }}-${{ env.GITHUB_SHA }}
-          path: build
+          name: "build-artifact"
+          path: build/
 
   GCP-Upload:
     needs: [Build]
