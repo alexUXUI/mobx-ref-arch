@@ -58,7 +58,7 @@ jobs:
         run: ls -la
       - uses: actions/upload-artifact@v3
         with:
-          name: "build-artifact"
+          name: ${{ env.GITHUB_REPOSITORY }}-${{ env.GITHUB_REF }}-${{ env.GITHUB_SHA }}
           path: ./build/
 
   Download-Artifacts:
