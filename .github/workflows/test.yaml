@@ -3,8 +3,8 @@ name: Test ENV CD Workflow
 on:
   push:
     branches:
-      - test
-      - main
+      - "test"
+      - "main"
 
 jobs:
   Hello-World:
