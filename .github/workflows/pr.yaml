@@ -115,10 +115,6 @@ jobs:
             echo "$file was changed"
           done
 
-      - run: ls -la /home/runner/work/mobx-ref-arch/mobx-ref-arch
-      - run: echo "hello world"
-      - run: cd /home/runner/work/mobx-ref-arch/mobx-ref-arch && cat gha-creds-*
-
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
