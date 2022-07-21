@@ -6,28 +6,28 @@ on:
       - test
 
 jobs:
-  Install:
-    runs-on: ubuntu-latest
+  # Install:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/deps-restore
-        id: cache-node-modules
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: ./.github/actions/deps-restore
+  #       id: cache-node-modules
 
-      - name: Download dependencies
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: yarn install --immutable
+  #     - name: Download dependencies
+  #       if: steps.cache-node-modules.outputs.cache-hit != 'true'
+  #       run: yarn install --immutable
 
-  Download:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
-      - name: Display structure of downloaded files
-        run: ls -R
+  # Download:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/download-artifact@v3
+  #     - name: Display structure of downloaded files
+  #       run: ls -R
 
   GCP-Upload:
-    needs: Download
+    # needs: Download
     runs-on: ubuntu-latest
     permissions:
       contents: "read"
@@ -36,13 +36,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
-      - uses: ./.github/actions/deps-restore
-      - uses: ./.github/actions/build-restore
-        id: cache-build
+      - name: Display structure of downloaded files
+        run: ls -R
+      # - uses: ./.github/actions/deps-restore
+      # - uses: ./.github/actions/build-restore
+      # id: cache-build
 
-      - name: Create New Build
-        if: steps.cache-build.outputs.cache-hit != 'true'
-        run: yarn build
+      # - name: Create New Build
+      #   if: steps.cache-build.outputs.cache-hit != 'true'
+      #   run: yarn build
 
       - uses: "google-github-actions/auth@v0"
         with:
@@ -51,6 +53,6 @@ jobs:
 
       - uses: "google-github-actions/upload-cloud-storage@v0"
         with:
-          path: ./build-${{ github.sha }}
+          path: ./build-${{ github.event.before }}
           destination: "ps-ref-arch-web-client/"
 # cool cool cool
