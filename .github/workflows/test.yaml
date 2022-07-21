@@ -21,7 +21,7 @@ jobs:
         run: ls -R
 
   GCP-Upload:
-    needs: Build
+    needs: Download-Artifacts
     runs-on: ubuntu-latest
     permissions:
       contents: "read"
@@ -44,8 +44,11 @@ jobs:
         with:
           workload_identity_provider: "projects/667117874450/locations/global/workloadIdentityPools/gh-pool/providers/github"
           service_account: "gh-oidc@ps-ref-arch.iam.gserviceaccount.com"
+      - run: ls -la
+      # echo the sha of the commit to the build artifact name
+        run: echo "build-${{ github.sha }}"
 
       - uses: "google-github-actions/upload-cloud-storage@v0"
         with:
-          path: ./build
+          path: ./build-${{ github.sha }}
           destination: "ps-ref-arch-web-client/"
