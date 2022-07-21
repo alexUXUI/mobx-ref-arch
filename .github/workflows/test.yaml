@@ -1,5 +1,5 @@
 name: Test ENV CD Workflow
-
+# yoo
 on:
   push:
     branches:
@@ -11,7 +11,7 @@ jobs:
     steps:
       - run: echo "Hello World!"
 
-  Download-Artifacts:
+  Download:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,7 +20,7 @@ jobs:
         run: ls -R
 
   GCP-Upload:
-    needs: Build
+    needs: Download
     runs-on: ubuntu-latest
     permissions:
       contents: "read"
@@ -28,11 +28,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
       - uses: ./.github/actions/deps-restore
       - uses: ./.github/actions/build-restore
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
-      - name: Display structure of downloaded files
         id: cache-build
 
       - name: Create New Build
@@ -43,10 +41,7 @@ jobs:
         with:
           workload_identity_provider: "projects/667117874450/locations/global/workloadIdentityPools/gh-pool/providers/github"
           service_account: "gh-oidc@ps-ref-arch.iam.gserviceaccount.com"
-      - run: ls -la
-      # echo the sha of the commit to the build artifact name
-        run: echo "build-${{ github.sha }}"
-        
+
       - uses: "google-github-actions/upload-cloud-storage@v0"
         with:
           path: ./build-${{ github.sha }}
