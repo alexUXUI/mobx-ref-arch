@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/deps-restore
         id: cache-node-modules
 
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/deps-restore
       - run: yarn lint
 
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/deps-restore
       - run: yarn test
 
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/deps-restore
       - uses: ./.github/actions/build-restore
         id: cache-build
@@ -54,41 +54,39 @@ jobs:
         if: steps.cache-build.outputs.cache-hit != 'true'
         run: yarn build
 
-  Upload-Artifact:
-    needs: Build
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/build-restore
+      - name: Upload Build Artifact
+        run: ls -la
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.GITHUB_REPOSITORY }}-${{ env.GITHUB_REF }}-${{ env.GITHUB_SHA }}
-          path: build
+          name: build-${{ github.sha }}
+          path: ./build/
 
-  GCP-Upload:
-    needs: [Build]
+  Download-Artifacts:
+    needs: Build
     runs-on: ubuntu-latest
-    permissions:
-      contents: "read"
-      id-token: "write"
-
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/build-restore
-      - uses: "google-github-actions/auth@v0"
-        with:
-          workload_identity_provider: "projects/667117874450/locations/global/workloadIdentityPools/gh-pool/providers/github"
-          service_account: "gh-oidc@ps-ref-arch.iam.gserviceaccount.com"
-      - run: echo process.env
-      - uses: "google-github-actions/upload-cloud-storage@v0"
-        with:
-          path: ./build
-          destination: "ps-ref-arch-web-client/"
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+      - name: Display structure of downloaded files
+        run: ls -R
 
-      - run: ls -la /home/runner/work/mobx-ref-arch/mobx-ref-arch
-      - run: echo "hello world"
-      - run: cd /home/runner/work/mobx-ref-arch/mobx-ref-arch && cat gha-creds-*
+  Changed-Files:
+    runs-on: ubuntu-latest # windows-latest | macos-latest
+    name: Test changed-files
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # OR "2" -> To retrieve the preceding commit.
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v23.2
+
+      - name: List all changed files
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
 
       - name: Dump GitHub context
         env:
@@ -122,3 +120,5 @@ jobs:
           echo "The run id is: $GITHUB_RUN_ID"
           echo "The GitHub Actor's username is: $GITHUB_ACTOR"
           echo "GitHub SHA: $GITHUB_SHA"
+
+# wait wut
