@@ -1,9 +1,10 @@
 name: Test ENV CD Workflow
 
-on: push
-  branches:
-    - test
-
+on:
+  push:
+    branches:
+      - test
+#ha
 jobs:
   Hello-World:
     runs-on: ubuntu-latest
