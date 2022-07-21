@@ -32,7 +32,6 @@ jobs:
       - uses: actions/download-artifact@v3
       - uses: ./.github/actions/deps-restore
       - uses: ./.github/actions/build-restore
-      - name: Display structure of downloaded files
         id: cache-build
 
       - name: Create New Build
