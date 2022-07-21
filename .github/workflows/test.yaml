@@ -1,0 +1,11 @@
+name: Test ENV CD Workflow
+
+on: push
+  branches:
+    - test
+
+jobs:
+  Hello-World:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello World!"
