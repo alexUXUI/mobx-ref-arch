@@ -4,9 +4,18 @@ on:
   push:
     branches:
       - test
-#ha
+
 jobs:
   Hello-World:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Hello World!"
+
+  Download-Artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+      - name: Display structure of downloaded files
+        run: ls -R
+
