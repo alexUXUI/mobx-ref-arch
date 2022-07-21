@@ -7,10 +7,17 @@ on:
       - "main"
 
 jobs:
-  Hello-World:
+  Install:
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo "Hello World!"
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/deps-restore
+        id: cache-node-modules
+
+      - name: Download dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: yarn install --immutable
 
   Download:
     runs-on: ubuntu-latest
