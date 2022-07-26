@@ -7,6 +7,7 @@ import "./App.css";
 function App() {
   return (
     <RootStoreProvider>
+      <h1>Hello World</h1>
       <CreateNote />
       <NotesTable />
     </RootStoreProvider>
