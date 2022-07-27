@@ -28,8 +28,3 @@ version-resolver:
 template: |
   ## What’s Changed
   $CHANGES
-  $CONTRIBUTORS
-  $PREVIOUS_TAG
-  $REPOSITORY
-  $BODY
-  $URL
