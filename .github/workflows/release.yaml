@@ -34,6 +34,7 @@ jobs:
       - run: echo ${{ steps.update_release_draft.outputs.body }}
 
   Notify-Slack:
+    needs: post_release_notes
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
