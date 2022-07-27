@@ -36,3 +36,10 @@ jobs:
         #   disable-autolabeler: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  post_release_notes:
+    needs: update_release_draft
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ steps.update_release_draft.outputs.body }}
+
