@@ -1,11 +1,11 @@
 name: Release Drafter
 
-# on:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
 
-on: pull_request
+# on: pull_request
 
 permissions:
   contents: write
@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   Release:
+    if: github.event.pull_request.merged == 'true'
     runs-on: ubuntu-latest
 
     steps:
@@ -33,14 +34,17 @@ jobs:
         with:
           commitish: "main"
           tag: ${{ steps.tag.outputs.tag }}
-          prelease: true
+          prerelease: true
+
+      - name: Log Context
+      - uses: crazy-max/ghaction-dump-context@v1
 
       - uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
 
   Notify-Slack:
-    needs: release
+    needs: Release
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
