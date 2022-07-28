@@ -4,10 +4,28 @@ on: pull_request
 
 permissions:
   contents: write
+  pull-requests: write # for release-drafter/release-drafter to add label to PR
 
 jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # for release-drafter/release-drafter to create a github release
+      pull-requests: write # for release-drafter/release-drafter to add label to PR
+
+    steps:
+      - uses: release-drafter/release-drafter@v5
+        id: draft
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          header: "I am the header"
+          footer: "I am the footer"
+
   create_release:
     runs-on: ubuntu-latest
+    needs: [update_release_draft]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -21,20 +39,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.tag.outputs.release_tag }}
-
-  update_release_draft:
-    needs: create_release
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write # for release-drafter/release-drafter to create a github release
-      pull-requests: write # for release-drafter/release-drafter to add label to PR
-
-    steps:
-      - uses: release-drafter/release-drafter@v5
-        id: draft
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   post_release_notes:
     needs: update_release_draft
