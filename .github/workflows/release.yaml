@@ -1,51 +1,52 @@
+name: Release Drafter
+
 on:
   push:
+    # branches to consider in the event; optional, defaults to all
     branches:
       - main
+  # pull_request event is required only for autolabeler
+  # pull_request:
+  # Only following types are handled by the action, but one can default to all as well
+  # types: [opened, reopened, synchronize]
+  # pull_request_target event is required for autolabeler to support PRs from forks
+  # pull_request_target:
+  #   types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
 
 jobs:
-  hello:
+  update_release_draft:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # for release-drafter/release-drafter to create a github release
+      pull-requests: write # for release-drafter/release-drafter to add label to PR
+
+    steps:
+      - uses: release-drafter/release-drafter@v5
+        id: draft
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  post_release_notes:
+    needs: update_release_draft
     runs-on: ubuntu-latest
     steps:
-      run: echo "Hello World"
-# permissions:
-#   contents: read
+      - run: echo "${{ steps.draft.outputs.body }}"
 
-# jobs:
-#   update_release_draft:
-#     runs-on: ubuntu-latest
-
-#     permissions:
-#       contents: write # for release-drafter/release-drafter to create a github release
-#       pull-requests: write # for release-drafter/release-drafter to add label to PR
-
-#     steps:
-#       - uses: release-drafter/release-drafter@v5
-#         id: draft
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-#   post_release_notes:
-#     needs: update_release_draft
-#     runs-on: ubuntu-latest
-#     steps:
-#       # output the output of the "draft step"
-#       - uses: actions/checkout@v3
-#       - uses: release-drafter/release-drafter@v5
-#         id: post-release-notes
-#         run: echo "${{ steps.draft.outputs.body }}"
-
-#   Notify-Slack:
-#     needs: post_release_notes
-#     name: Slack Notification
-#     runs-on: ubuntu-latest
-#     # if: github.event.pull_request.merged == true
-#     steps:
-#       - uses: actions/checkout@v2
-#       - name: Slack Notification
-#         uses: rtCamp/action-slack-notify@v2
-#         env:
-#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-#           SLACK_MESSAGE: ${{ steps.draft.outputs.body }}
-#           SLACK_ICON: https://assets.website-files.com/6166408856602addeee5f874/627d940d412b116983a4ad07_footer_logo.svg
-#           SLACK_FOOTER: "(click the commit ID to see the diff)"
+  Notify-Slack:
+    needs: post_release_notes
+    name: Slack Notification
+    runs-on: ubuntu-latest
+    # if: github.event.pull_request.merged == true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_MESSAGE: ${{ steps.update_release_draft.outputs.body }}
+          SLACK_ICON: https://assets.website-files.com/6166408856602addeee5f874/627d940d412b116983a4ad07_footer_logo.svg
+          SLACK_FOOTER: "(click the commit ID to see the diff)"
