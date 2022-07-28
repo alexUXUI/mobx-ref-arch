@@ -24,6 +24,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
 
+      - name: Log Tag
+      - run: echo "${{ steps.tag.outputs.tag }}"
+
       - uses: release-drafter/release-drafter@v5
         id: draft
         env:
