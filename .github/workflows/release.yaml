@@ -11,6 +11,14 @@ permissions:
   contents: read
 
 jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Release
+        uses: softprops/action-gh-release@v1
+
   update_release_draft:
     runs-on: ubuntu-latest
 
