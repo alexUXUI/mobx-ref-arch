@@ -19,6 +19,7 @@ jobs:
           fetch-depth: "0"
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.36.0
+        id: tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
@@ -29,8 +30,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+    - name: Generate release tag
+      id: tag-two
+      run: |
+        echo "::set-output name=release_tag::UserBuild_$(date +"%Y.%m.%d_%H-%M")"
+
       - name: Release
         uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
 
   update_release_draft:
     needs: create_release
