@@ -7,24 +7,20 @@ permissions:
   pull-requests: write # for release-drafter/release-drafter to add label to PR
 
 jobs:
-  update_release_draft:
-    needs: create_tag
+  Release:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout code
       - uses: actions/checkout@v2
         with:
           fetch-depth: "0"
 
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.36.0
+      - uses: anothrNick/github-tag-action@1.36.0
         id: tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
 
-      - name: Update Release Draft
       - uses: release-drafter/release-drafter@v5
         id: draft
         env:
@@ -33,19 +29,12 @@ jobs:
           commitish: "main"
           tag: ${{ steps.tag.outputs.tag }}
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+      - uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
 
-  post_release_notes:
-    needs: update_release_draft
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "${{ steps.draft.outputs.body }}"
-
   Notify-Slack:
-    needs: post_release_notes
+    needs: release
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
