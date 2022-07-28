@@ -2,39 +2,20 @@ name: Release Drafter
 
 on: pull_request
 
-# on:
-#   push:
-#     branches:
-#       - main
-
 permissions:
   contents: write
 
 jobs:
-  # create_tag:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: "0"
-  #     - name: Bump version and push tag
-  #       uses: anothrNick/github-tag-action@1.36.0
-  #       id: tag
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         WITH_V: true
-
   create_release:
-    # needs: create_tag
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-    - name: Generate release tag
-      id: tag
-      run: |
-        echo "::set-output name=release_tag::UserBuild_$(date +"%Y.%m.%d_%H-%M")"
+      - name: Generate release tag
+        id: tag
+        run: |
+          echo "::set-output name=release_tag::UserBuild_$(date +"%Y.%m.%d_%H-%M")"
 
       - name: Release
         uses: softprops/action-gh-release@v1
