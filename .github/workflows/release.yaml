@@ -24,7 +24,7 @@ jobs:
     needs: create_tag
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ steps.tag.outputs.tag }}
+      - run: echo "${{ steps.create_tag.outputs.tag }}"
 
   update_release_draft:
     needs: create_tag
@@ -37,7 +37,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           commitish: "main"
-          tag: ${{ steps.tag.outputs.tag }}
+          tag: ${{ steps.create_tag.outputs.tag }}
 
   create_release:
     runs-on: ubuntu-latest
@@ -49,7 +49,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.tag.outputs.tag }}
+          tag_name: ${{ steps.create_tag.outputs.tag }}
 
   post_release_notes:
     needs: update_release_draft
