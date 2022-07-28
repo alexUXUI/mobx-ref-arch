@@ -16,6 +16,8 @@ describe("Create note test suite", () => {
 
     expect(form).toBeInTheDocument();
     expect(form).toBeVisible();
+
+    // test
   });
 
   it("should render an input for title", () => {
