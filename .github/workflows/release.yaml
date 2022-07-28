@@ -41,3 +41,4 @@ jobs:
           SLACK_MESSAGE: ${{ steps.update_release_draft.outputs.body }}
           SLACK_ICON: https://assets.website-files.com/6166408856602addeee5f874/627d940d412b116983a4ad07_footer_logo.svg
           SLACK_FOOTER: "(click the commit ID to see the diff)"
+          MSG_MINIMAL: commit
