@@ -44,4 +44,4 @@ jobs:
           MSG_MINIMAL: commit
           SLACK_COLOR: ${{ job.status }}
           SLACK_MSG_AUTHOR: "PSTool 🤖"
-          SLACK_ICON_EMOJI: :robot_face:
+          SLACK_ICON_EMOJI: ":robot_face:"
