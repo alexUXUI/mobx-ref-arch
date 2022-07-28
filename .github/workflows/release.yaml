@@ -36,7 +36,8 @@ jobs:
           tag: ${{ steps.tag.outputs.tag }}
           prerelease: true
 
-      - uses: crazy-max/ghaction-dump-context@v1
+      - run: echo "${{ steps.draft.outputs.body }}"
+      - run: echo "${{ steps.tag.outputs.tag }}"
 
       - uses: softprops/action-gh-release@v1
         with:
