@@ -23,7 +23,8 @@ jobs:
   echo_tag:
     needs: create_tag
     runs-on: ubuntu-latest
-    run: echo ${{ steps.tag.outputs.tag }}
+    steps:
+      - run: echo ${{ steps.tag.outputs.tag }}
 
   update_release_draft:
     needs: create_tag
