@@ -10,18 +10,13 @@ jobs:
   update_release_draft:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write # for release-drafter/release-drafter to create a github release
-      pull-requests: write # for release-drafter/release-drafter to add label to PR
-
     steps:
       - uses: release-drafter/release-drafter@v5
         id: draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          header: "I am the header"
-          footer: "I am the footer"
+          commitish: "main"
 
   create_release:
     runs-on: ubuntu-latest
