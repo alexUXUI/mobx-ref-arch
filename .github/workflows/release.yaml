@@ -7,7 +7,26 @@ permissions:
   pull-requests: write # for release-drafter/release-drafter to add label to PR
 
 jobs:
+  create_tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.36.0
+        id: tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+
+  echo_tag:
+    needs: create_tag
+    runs-on: ubuntu-latest
+    run: echo ${{ steps.tag.outputs.tag }}
+
   update_release_draft:
+    needs: create_tag
     runs-on: ubuntu-latest
 
     steps:
@@ -17,6 +36,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           commitish: "main"
+          tag: ${{ steps.tag.outputs.tag }}
 
   create_release:
     runs-on: ubuntu-latest
@@ -25,15 +45,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Generate release tag
-        id: tag
-        run: |
-          echo "::set-output name=release_tag::UserBuild_$(date +"%Y.%m.%d_%H-%M")"
-
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.tag.outputs.release_tag }}
+          tag_name: ${{ steps.tag.outputs.tag }}
 
   post_release_notes:
     needs: update_release_draft
