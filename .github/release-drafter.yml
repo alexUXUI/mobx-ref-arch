@@ -48,8 +48,3 @@ template: |
   $PREVIOUS_TAG
   $REPOSITORY
   $OWNER
-  $TITLE
-  $PATCH
-  $MINOR
-  $MAJOR	
-  $COMPLETE

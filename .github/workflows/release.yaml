@@ -2,16 +2,8 @@ name: Release Drafter
 
 on:
   push:
-    # branches to consider in the event; optional, defaults to all
     branches:
       - main
-  # pull_request event is required only for autolabeler
-  # pull_request:
-  # Only following types are handled by the action, but one can default to all as well
-  # types: [opened, reopened, synchronize]
-  # pull_request_target event is required for autolabeler to support PRs from forks
-  # pull_request_target:
-  #   types: [opened, reopened, synchronize]
 
 permissions:
   contents: read
@@ -34,7 +26,11 @@ jobs:
     needs: update_release_draft
     runs-on: ubuntu-latest
     steps:
-      - run: echo "${{ steps.draft.outputs.body }}"
+      # output the output of the "draft step"
+      - uses: actions/checkout@v3
+      - uses: release-drafter/release-drafter@v5
+        id: post-release-notes
+        run: echo "${{ steps.update_release_draft.outputs.body }}"
 
   Notify-Slack:
     needs: post_release_notes
