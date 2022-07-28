@@ -26,7 +26,7 @@ jobs:
 
     steps:
       - uses: release-drafter/release-drafter@v5
-        id: update_release_draft
+        id: draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -34,7 +34,7 @@ jobs:
     needs: update_release_draft
     runs-on: ubuntu-latest
     steps:
-      - run: echo "${{ steps.update_release_draft.outputs.body }}"
+      - run: echo "${{ steps.draft.outputs.body }}"
 
   Notify-Slack:
     needs: post_release_notes
