@@ -6,30 +6,38 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write # for release-drafter/release-drafter to add label to PR
 
 jobs:
-  update_release_draft:
+  Release:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write # for release-drafter/release-drafter to create a github release
-      pull-requests: write # for release-drafter/release-drafter to add label to PR
-
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
+
+      - uses: anothrNick/github-tag-action@1.36.0
+        id: tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+
       - uses: release-drafter/release-drafter@v5
         id: draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          commitish: "main"
+          tag: ${{ steps.tag.outputs.tag }}
 
-  post_release_notes:
-    needs: update_release_draft
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "${{ steps.draft.outputs.body }}"
+      - uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
 
   Notify-Slack:
-    needs: post_release_notes
+    needs: release
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
@@ -43,5 +51,3 @@ jobs:
           SLACK_FOOTER: "(click the commit ID to see the diff)"
           MSG_MINIMAL: commit
           SLACK_COLOR: ${{ job.status }}
-          SLACK_MSG_AUTHOR: "PSTool 🤖"
-          SLACK_ICON_EMOJI: :robot_face:
