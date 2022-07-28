@@ -26,11 +26,7 @@ jobs:
     needs: update_release_draft
     runs-on: ubuntu-latest
     steps:
-      # output the output of the "draft step"
-      - uses: actions/checkout@v3
-      - uses: release-drafter/release-drafter@v5
-        id: post-release-notes
-        run: echo "${{ steps.draft.outputs.body }}"
+      run: echo "${{ steps.draft.outputs.body }}"
 
   Notify-Slack:
     needs: post_release_notes
