@@ -1,5 +1,15 @@
-steps:
-  run: echo "Hello World"
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      run: echo "Hello World"
 # permissions:
 #   contents: read
 
