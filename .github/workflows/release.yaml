@@ -11,21 +11,21 @@ permissions:
   contents: write
 
 jobs:
-  create_tag:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: "0"
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.36.0
-        # id: tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true
+  # create_tag:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: "0"
+  #     - name: Bump version and push tag
+  #       uses: anothrNick/github-tag-action@1.36.0
+  #       id: tag
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         WITH_V: true
 
   create_release:
-    needs: create_tag
+    # needs: create_tag
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,7 +39,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.tag.outputs.tag }}
+          tag_name: ${{ steps.tag.outputs.release_tag }}
 
   update_release_draft:
     needs: create_release
