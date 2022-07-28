@@ -11,6 +11,15 @@ permissions:
   contents: read
 
 jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: rickstaa/action-create-tag@v1
+        with:
+          tag: "latest"
+          message: "Latest release"
+
   create_release:
     runs-on: ubuntu-latest
     steps:
@@ -53,5 +62,3 @@ jobs:
           SLACK_FOOTER: "(click the commit ID to see the diff)"
           MSG_MINIMAL: commit
           SLACK_COLOR: ${{ job.status }}
-          SLACK_MSG_AUTHOR: "PSTool 🤖"
-          SLACK_ICON_EMOJI: ":robot_face:"
