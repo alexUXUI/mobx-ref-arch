@@ -43,9 +43,22 @@ version-resolver:
   default: patch
 template: |
   ## What's Changed 
-
   $CHANGES
+
+  ## Contributors
   $CONTRIBUTORS
+
+  ## Previous Version
   $PREVIOUS_TAG
+
+  ## Repo 
   $REPOSITORY
+
+  ## Owner
   $OWNER
+
+  ## Version
+  $NEXT_PATCH_VERSION
+  $NEXT_MINOR_VERSION
+  $NEXT_MAJOR_VERSION
+  $RESOLVED_VERSION
