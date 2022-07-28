@@ -6,6 +6,8 @@ import "../../styles/form.style.css";
 
 type InputHandler = (e: React.ChangeEvent<HTMLInputElement>) => void;
 
+// adds feature
+
 export const CreateNote = observer(() => {
   // provision the stores from the context
   const { newNoteStore, noteStore } = useStores();
