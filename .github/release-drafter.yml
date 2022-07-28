@@ -49,7 +49,6 @@ template: |
   $PREVIOUS_TAG
   $REPOSITORY
   $OWNER
-
-  Target Branch: $BASE_REF_NAME
-  PR Branch: $HEAD_REF_NAME
-  Title: $TITLE
+  $BASE_REF_NAME
+  $HEAD_REF_NAME
+  $TITLE
