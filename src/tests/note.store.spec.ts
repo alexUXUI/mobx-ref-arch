@@ -3,8 +3,6 @@ import { RootStore } from "../stores/root.store";
 
 const rootStore = new RootStore();
 
-// spec change
-
 describe("NoteStore Test Suite", () => {
   it("should exist", () => {
     const noteStore = new NoteStore(rootStore);
