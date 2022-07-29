@@ -1,9 +1,11 @@
 name: Release Drafter
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
+
+on: pull_request
 
 permissions:
   contents: write
@@ -50,6 +52,8 @@ jobs:
           url: ${{ secrets.SLACK_WEBHOOK_URL }}
           token: ${{ secrets.TOKEN }}
           body: ${{ steps.draft.outputs.body }}
+          websiteurl: "https://test.productscience.app/"
+          releaseurl: ${{ steps.draft.outputs.html_url }}
 
   # Notify-Slack:
   #   needs: Release
