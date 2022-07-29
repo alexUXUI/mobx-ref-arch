@@ -5,8 +5,6 @@ on:
     branches:
       - main
 
-# on: pull_request
-
 permissions:
   contents: write
   pull-requests: write
@@ -43,17 +41,27 @@ jobs:
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
 
-  Notify-Slack:
+  Custom-Slack-Notification:
     needs: Release
-    name: Slack Notification
     runs-on: ubuntu-latest
     steps:
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_MESSAGE: ${{ steps.draft.outputs.body }}
-          SLACK_ICON: https://assets.website-files.com/6166408856602addeee5f874/627d940d412b116983a4ad07_footer_logo.svg
-          SLACK_FOOTER: ${{ steps.draft.outputs.html_url }}
-          SLACK_COLOR: ${{ job.status }}
-          MSG_MINIMAL: commit
+      - uses: alexuxui/slacktion@v3.0
+        with:
+          url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          token: ${{ secrets.TOKEN }}
+          body: ${{ steps.draft.outputs.body }}
+
+  # Notify-Slack:
+  #   needs: Release
+  #   name: Slack Notification
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Slack Notification
+  #       uses: rtCamp/action-slack-notify@v2
+  #       env:
+  #         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+  #         SLACK_MESSAGE: ${{ steps.draft.outputs.body }}
+  #         SLACK_ICON: https://assets.website-files.com/6166408856602addeee5f874/627d940d412b116983a4ad07_footer_logo.svg
+  #         SLACK_FOOTER: "test footer"
+  #         SLACK_COLOR: ${{ job.status }}
+  #         MSG_MINIMAL: commit
