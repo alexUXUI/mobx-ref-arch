@@ -1,12 +1,12 @@
 name: Release Drafter
 
 on:
-  pull_request:
-    branches:
-      - rd-17
-  push:
-    branches:
-      - main
+  pull_request
+  #   branches:
+  #     - rd-17
+  # push:
+  #   branches:
+  #     - main
 
 permissions:
   contents: write
