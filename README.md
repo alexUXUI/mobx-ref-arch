@@ -2,7 +2,6 @@
 
 <img width="1009" alt="Screen Shot 2022-06-26 at 6 18 48 PM" src="https://user-images.githubusercontent.com/9002289/175839876-f9f3581a-e2d4-403a-a2f1-85cd55663d02.png">
 
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -47,4 +46,5 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
 # mobx-ref-arch

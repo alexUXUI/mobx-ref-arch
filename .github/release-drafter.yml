@@ -13,7 +13,10 @@ categories:
   - title: "🧰 Maintenance"
     label: "chore"
 autolabeler:
-  - label: "chore"
+  - label: "Tests"
+    files:
+      - "*.spec.*"
+  - label: "Docs"
     files:
       - "*.md"
     branch:
