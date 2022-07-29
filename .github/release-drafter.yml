@@ -1,6 +1,12 @@
 name-template: "$RESOLVED_VERSION"
 tag-template: "$RESOLVED_VERSION"
 categories:
+  - tests: "🔬 Tests"
+    labels:
+      - "tests"
+  - docs: "📚 Docs"
+    labels:
+      - "docs"
   - title: "🚀 Features"
     labels:
       - "feature"
