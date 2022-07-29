@@ -1,11 +1,12 @@
 name: Release Drafter
 
 on:
-  push:
-    branches:
-      - main
-
-# on: pull_request
+  pull_request
+  #   branches:
+  #     - rd-17
+  # push:
+  #   branches:
+  #     - main
 
 permissions:
   contents: write
@@ -53,7 +54,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_MESSAGE: ${{ steps.draft.outputs.body }}
+          SLACK_MESSAGE: ${{ steps.draft.outputs.body }} ${{ steps.draft.outputs.url }}
           SLACK_ICON: https://assets.website-files.com/6166408856602addeee5f874/627d940d412b116983a4ad07_footer_logo.svg
           SLACK_FOOTER: ${{ steps.draft.outputs.html_url }}
           MSG_MINIMAL: commit
