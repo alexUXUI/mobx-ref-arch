@@ -45,7 +45,7 @@ jobs:
     needs: Release
     runs-on: ubuntu-latest
     steps:
-      - uses: alexuxui/slacktion@v3.0
+      - uses: alexuxui/slacktion@v4.0
         with:
           url: ${{ secrets.SLACK_WEBHOOK_URL }}
           token: ${{ secrets.TOKEN }}
