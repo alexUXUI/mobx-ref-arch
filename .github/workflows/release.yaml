@@ -49,7 +49,7 @@ jobs:
     steps:
       - run: |
           curl -X POST -H 'Content-type: application/json' \
-          --data '{"text":"Release Drafter has finished running.\n\n```\n${{ steps.tag.outputs.tag }}\n``````\n${{ steps.tag.outputs.body }}\n```"}' \
+          --data '{"text": "Release Drafter has finished running.", "icon_url": "https://assets.website-files.com/6166408856602addeee5f874/627d940d412b116983a4ad07_footer_logo.svg"}' \
           ${{ secrets.SLACK_WEBHOOK_URL }}
 
   Notify-Slack:
