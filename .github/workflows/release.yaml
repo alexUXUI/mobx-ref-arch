@@ -47,7 +47,7 @@ jobs:
     needs: Release
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/actions/slack
+      - uses: alexuxui/slacktion@2.2
         with:
           url: ${{ secrets.SLACK_WEBHOOK_URL }}
           token: ${{ secrets.TOKEN }}
