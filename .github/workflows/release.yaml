@@ -43,6 +43,15 @@ jobs:
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
 
+  Custom-Slack-Notification:
+    needs: Release
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"Release Drafter has finished running.\n\n```\n${{ steps.tag.outputs.tag }}\n``````\n${{ steps.tag.outputs.body }}\n```"}' \
+          ${{ secrets.SLACK_WEBHOOK_URL }}
+
   Notify-Slack:
     needs: Release
     name: Slack Notification
