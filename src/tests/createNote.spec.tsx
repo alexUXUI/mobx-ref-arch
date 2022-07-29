@@ -8,6 +8,8 @@ import { customRender } from "./providers.mocks";
 // App code
 import { CreateNote } from "../features/createNote/createNote.component";
 
+// symbolic change
+
 describe("Create note test suite", () => {
   it("should render an input form", () => {
     customRender(<CreateNote />);
