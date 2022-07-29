@@ -47,10 +47,11 @@ jobs:
     needs: Release
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          curl -X POST -H 'Content-type: application/json' \
-          --data '{"text": "Release Drafter has finished running.", "icon_url": "https://assets.website-files.com/6166408856602addeee5f874/627d940d412b116983a4ad07_footer_logo.svg"}' \
-          ${{ secrets.SLACK_WEBHOOK_URL }}
+      - uses: ./.github/actions/slack
+        with:
+          url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          token: ${{ secrets.TOKEN }}
+          body: ${{ steps.draft.outputs.body }}
 
   Notify-Slack:
     needs: Release
@@ -63,6 +64,6 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_MESSAGE: ${{ steps.draft.outputs.body }}
           SLACK_ICON: https://assets.website-files.com/6166408856602addeee5f874/627d940d412b116983a4ad07_footer_logo.svg
-          SLACK_FOOTER: 'test footer'
+          SLACK_FOOTER: "test footer"
           SLACK_COLOR: ${{ job.status }}
           MSG_MINIMAL: commit
