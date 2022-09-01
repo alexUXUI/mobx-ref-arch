@@ -3,35 +3,21 @@ name: PR Workflow CI
 on: pull_request
 
 jobs:
-  Commits:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: '0'
-      ## parse the git commits to json and set the json as an output using shell script
-      - name: Parse git commits
-        id: parse-git-commits
-        run: |
-          echo "::set-output name=commits::$(git log --pretty="%h|%s|%aN|%aE|%aD" --no-merges -n 1)"
-      ## print the output
-      - name: Print git commits
-        run: |
-          echo "${{ steps.parse-git-commits.outputs.commits }}"
-
-  ParseBranchName:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: '0'
-      - name: Parse branch name
-        id: parse-branch-name
-        run: |
-          echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
-      - name: Print branch name
-        run: |
-          echo "${{ steps.parse-branch-name.outputs.branch }}"
+  # Commits:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: '0'
+  #     ## parse the git commits to json and set the json as an output using shell script
+  #     - name: Parse git commits
+  #       id: parse-git-commits
+  #       run: |
+  #         echo "::set-output name=commits::$(git log --pretty="%h|%s|%aN|%aE|%aD" --no-merges -n 1)"
+  #     ## print the output
+  #     - name: Print git commits
+  #       run: |
+  #         echo "${{ steps.parse-git-commits.outputs.commits }}"
 
   GetCommitsRelativeToTarget:
     runs-on: ubuntu-latest
@@ -52,43 +38,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Hello world
-        run: |
-          echo "Hello world"
-          echo "The commits are: ${{ steps.get-commits-relative-to-target.outputs.commits }}"
-
       - uses: actions/checkout@v2
         with:
           fetch-depth: '0'
         # - run: echo "Hello World"
-        name: Send custom JSON data to Slack workflow
-        id: slack
-      - uses: slackapi/slack-github-action@v1.18.0
-        with:
-          # For posting a rich message using Block Kit
-          payload: |
-            {
-              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "The commits are: ${{ steps.get-commits-relative-to-target.outputs.commits }}"
-                  }
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      - name: Hello world
+        run: |
+          echo "Hello world"
+          echo ${{ steps.get-commits-relative-to-target.outputs.commits }}
+
+      #   name: Send custom JSON data to Slack workflow
+      #   id: slack
+      # - uses: slackapi/slack-github-action@v1.18.0
+      #   with:
+      #     # For posting a rich message using Block Kit
+      #     payload: |
+      #       {
+      #         "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+      #         "blocks": [
+      #           {
+      #             "type": "section",
+      #             "text": {
+      #               "type": "mrkdwn",
+      #               "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+      #             }
+      #           },
+      #           {
+      #             "type": "section",
+      #             "text": {
+      #               "type": "mrkdwn",
+      #               "text": "The commits are: ${{ steps.get-commits-relative-to-target.outputs.commits }}"
+      #             }
+      #           }
+      #         ]
+      #       }
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
   # Cancel-Previous:
   #   runs-on: ubuntu-latest
@@ -207,4 +193,5 @@ jobs:
   #         echo "The run id is: $GITHUB_RUN_ID"
   #         echo "The GitHub Actor's username is: $GITHUB_ACTOR"
   #         echo "GitHub SHA: $GITHUB_SHA"
+
 # wait wut
