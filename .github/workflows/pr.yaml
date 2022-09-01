@@ -45,7 +45,7 @@ jobs:
       # echo the output of the preivous step
       - name: Print commits relative to target
         run: |
-          echo "${{ needs.GetCommitsRelativeToTarget.outputs.commits }}"
+          echo "HELLO WORLD"
 
       #   name: Send custom JSON data to Slack workflow
       #   id: slack
