@@ -42,14 +42,14 @@ jobs:
         with:
           fetch-depth: '0'
 
-      # echo the output of the preivous step
-      # - name: Print commits relative to target
-      #   run: |
-      #     echo "${{ needs.GetCommitsRelativeToTarget.outputs.commits }}"
+        # echo the output of the preivous step
+        # - name: Print commits relative to target
+        #   run: |
+        #     echo "${{ needs.GetCommitsRelativeToTarget.outputs.commits }}"
 
-      # - name: Print the commit messsages from the previous step
-      # run: |
-      # echo "${{ GetCommitsRelativeToTarget.get-commits-relative-to-target.outputs.commits }}"
+        # - name: Print the commit messsages from the previous step
+        # run: |
+        # echo "${{ GetCommitsRelativeToTarget.get-commits-relative-to-target.outputs.commits }}"
 
         name: Send custom JSON data to Slack workflow
         id: slack
@@ -80,7 +80,7 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
   # Cancel-Previous:
   #   runs-on: ubuntu-latest
