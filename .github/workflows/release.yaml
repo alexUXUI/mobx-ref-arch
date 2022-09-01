@@ -17,39 +17,60 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: "0"
-
-      - uses: anothrNick/github-tag-action@1.36.0
-        id: tag
+          fetch-depth: '0'
+      - name: Send custom JSON data to Slack workflow
+        id: slack
+      - uses: slackapi/slack-github-action@v1.18.0
+        with:
+          # For posting a rich message using Block Kit
+          payload: |
+            {
+              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                }
+              ]
+            }
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
-      - uses: release-drafter/release-drafter@v5
-        id: draft
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          commitish: "main"
-          tag: ${{ steps.tag.outputs.tag }}
-          prerelease: true
+  #     - uses: anothrNick/github-tag-action@1.36.0
+  #       id: tag
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         WITH_V: true
 
-      - run: echo "${{ steps.draft.outputs.body }}"
-      - run: echo "${{ steps.tag.outputs.tag }}"
+  #     - uses: release-drafter/release-drafter@v5
+  #       id: draft
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         commitish: 'main'
+  #         tag: ${{ steps.tag.outputs.tag }}
+  #         prerelease: true
 
-      - uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ steps.tag.outputs.tag }}
+  #     - run: echo "${{ steps.draft.outputs.body }}"
+  #     - run: echo "${{ steps.tag.outputs.tag }}"
 
-  Custom-Slack-Notification:
-    needs: Release
-    runs-on: ubuntu-latest
-    steps:
-      - uses: alexuxui/slacktion@v3.0
-        with:
-          url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          token: ${{ secrets.TOKEN }}
-          body: ${{ steps.draft.outputs.body }}
+  #     - uses: softprops/action-gh-release@v1
+  #       with:
+  #         tag_name: ${{ steps.tag.outputs.tag }}
+
+  # Custom-Slack-Notification:
+  #   needs: Release
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: alexuxui/slacktion@v3.0
+  #       with:
+  #         url: ${{ secrets.SLACK_WEBHOOK_URL }}
+  #         token: ${{ secrets.TOKEN }}
+  #         body: ${{ steps.draft.outputs.body }}
 
   # Notify-Slack:
   #   needs: Release
@@ -62,6 +83,6 @@ jobs:
   #         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
   #         SLACK_MESSAGE: ${{ steps.draft.outputs.body }}
   #         SLACK_ICON: https://assets.website-files.com/6166408856602addeee5f874/627d940d412b116983a4ad07_footer_logo.svg
-  #         SLACK_FOOTER: "test footer"
+  #         SLACK_FOOTER: 'test footer'
   #         SLACK_COLOR: ${{ job.status }}
   #         MSG_MINIMAL: commit
