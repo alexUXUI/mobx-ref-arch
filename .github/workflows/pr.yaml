@@ -33,6 +33,20 @@ jobs:
         run: |
           echo "${{ steps.parse-branch-name.outputs.branch }}"
 
+  GetCommitsRelativeToTarget:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: Get commits relative to target
+        id: get-commits-relative-to-target
+        run: |
+          echo "::set-output name=commits::$(git log --pretty="%h|%s|%aN|%aE|%aD" --no-merges origin/${{ github.base_ref }}..HEAD)"
+      - name: Print commits relative to target
+        run: |
+          echo "${{ steps.get-commits-relative-to-target.outputs.commits }}"
+
   HelloWorld:
     runs-on: ubuntu-latest
     needs: Commits
