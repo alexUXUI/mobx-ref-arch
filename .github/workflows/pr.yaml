@@ -19,6 +19,20 @@ jobs:
         run: |
           echo "${{ steps.parse-git-commits.outputs.commits }}"
 
+  ParseBranchName:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: Parse branch name
+        id: parse-branch-name
+        run: |
+          echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
+      - name: Print branch name
+        run: |
+          echo "${{ steps.parse-branch-name.outputs.branch }}"
+
   HelloWorld:
     runs-on: ubuntu-latest
     needs: Commits
