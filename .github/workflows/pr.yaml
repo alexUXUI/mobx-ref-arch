@@ -71,6 +71,13 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
+                    "text": "This is another test"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
                     "text": $(git log --pretty="%h|%s|%aN|%aE|%aD" --no-merges origin/${{ github.base_ref }}..HEAD)
                   }
                 }
@@ -78,7 +85,7 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          # SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
   # Cancel-Previous:
   #   runs-on: ubuntu-latest
