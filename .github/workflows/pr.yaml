@@ -71,11 +71,9 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "test"
+                    "text": "${{ git log --pretty="%h|%s|%aN|%aE|%aD" --no-merges origin/${{ github.base_ref }}..HEAD }}"
                   }
                 },
-
-                
               ]
             }
         env:
