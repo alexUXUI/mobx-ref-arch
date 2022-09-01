@@ -15,14 +15,14 @@ jobs:
         run: |
           echo "::set-output name=commits::$(jq -Rn --argjson commits "$(git log --pretty=format:'{"sha":"%H","message":"%s","author":"%an","date":"%ad"}' --date=iso)" '$commits')"
 
-  # Echo-Commits:
-  #   needs: Commits
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: '0'
-  #     run: echo "${{ get_commits.outputs.commits }}"
+  Echo-Commits:
+    needs: Commits
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      run: echo "${{ needs.Commits.outputs.commits }}"
 
   # Release:
   #   runs-on: ubuntu-latest
