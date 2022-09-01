@@ -81,7 +81,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text":"TEST"
+                    "text": echo "The commits are: ${{ steps.parse-git-commits.outputs.commits }}"
                   }
                 }
               ]
