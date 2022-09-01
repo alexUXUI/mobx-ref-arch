@@ -15,6 +15,13 @@ jobs:
         run: |
           echo "::set-output name=commits::$(jq -Rn --argjson commits "$(git log --pretty=format:'{"sha":"%H","message":"%s","author":"%an","date":"%ad"}' --date=iso)" '$commits')"
 
+  Echo-Commits:
+    needs: Commits
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo commits
+        run: echo "${{ Commits.outputs.commits }}"
+
   Release:
     runs-on: ubuntu-latest
 
@@ -43,7 +50,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ steps.get_commits.commits }}"
+                    "text": "test"
                   }
                 }
               ]
