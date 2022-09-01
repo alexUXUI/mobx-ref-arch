@@ -57,6 +57,7 @@ jobs:
           echo "The commits are: ${{ steps.parse-git-commits.outputs.commits }}"
 
   Release:
+    needs: GetCommitsRelativeToTarget
     runs-on: ubuntu-latest
 
     steps:
