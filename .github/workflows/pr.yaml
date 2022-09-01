@@ -28,18 +28,49 @@ jobs:
           # Use the output from the previous job
           echo "${{ needs.parse_commits.outputs.commits }}"
 
-  first_job:
+  Release:
+    needs: [parse_commits, echo_commits]
     runs-on: ubuntu-latest
-    outputs:
-      time: ${{ steps.date.outputs.time }}
-    steps:
-      - name: Get the time
-        id: date
-        run: echo "::set-output name=time::$(date +'%Y-%m-%d %H:%M:%S')"
 
-  second_job:
-    needs: first_job
-    runs-on: ubuntu-latest
     steps:
-      - name: Get the time
-        run: echo "The time was ${{ needs.first_job.outputs.time }}"
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+
+        # echo the output of the preivous step
+        # - name: Print commits relative to target
+        #   run: |
+        #     echo "${{ needs.GetCommitsRelativeToTarget.outputs.commits }}"
+
+        # - name: Print the commit messsages from the previous step
+        # run: |
+        # echo "${{ GetCommitsRelativeToTarget.get-commits-relative-to-target.outputs.commits }}"
+
+        name: Send custom JSON data to Slack workflow
+        id: slack
+      - uses: slackapi/slack-github-action@v1.18.0
+        with:
+          # For posting a rich message using Block Kit
+          payload: |
+            {
+              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "commits: ${{ needs.parse_commits.outputs.commits }}"
+                  }
+                },
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
