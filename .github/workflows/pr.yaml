@@ -3,12 +3,9 @@ name: PR Workflow CI
 on: pull_request
 
 jobs:
-  # create two jobs. The first job produces some output and the second job uses that output
-
   parse_commits:
     runs-on: ubuntu-latest
     outputs:
-      # Define the output variable
       commits: ${{ steps.parse.outputs.commits }}
     steps:
       - name: Checkout
@@ -17,7 +14,7 @@ jobs:
         id: parse
         run: |
           # Parse the commits and output the result
-          echo "::set-output name=commits::$(git log --pretty="%h|%s|%aN|%aE|%aD" --no-merges)"
+          echo "::set-output name=commits::$(git log --pretty=tformat:"%h|%s|%aN|%aE|%aD|%w|%cN|%b|%N" --no-merges)"
 
   echo_commits:
     runs-on: ubuntu-latest
@@ -36,15 +33,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: '0'
-
-        # echo the output of the preivous step
-        # - name: Print commits relative to target
-        #   run: |
-        #     echo "${{ needs.GetCommitsRelativeToTarget.outputs.commits }}"
-
-        # - name: Print the commit messsages from the previous step
-        # run: |
-        # echo "${{ GetCommitsRelativeToTarget.get-commits-relative-to-target.outputs.commits }}"
 
         name: Send custom JSON data to Slack workflow
         id: slack
