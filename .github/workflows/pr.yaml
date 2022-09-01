@@ -19,8 +19,7 @@ jobs:
     needs: Commits
     runs-on: ubuntu-latest
     steps:
-      - name: Echo commits
-        run: echo "${{ Commits.outputs.commits }}"
+      run: echo "${{ Commits.outputs.commits }}"
 
   Release:
     runs-on: ubuntu-latest
