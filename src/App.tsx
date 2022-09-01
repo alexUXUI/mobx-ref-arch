@@ -3,9 +3,8 @@ import { NotesTable } from './features/notesTable/notesTable.component';
 import { CreateNote } from './features/createNote/createNote.component';
 import './App.css';
 
-
+// Feature"A"
 // feature B
-
 // new features
 
 function App() {
