@@ -15,11 +15,15 @@ jobs:
         run: |
           echo "::set-output name=commits::$(jq -Rn --argjson commits "$(git log --pretty=format:'{"sha":"%H","message":"%s","author":"%an","date":"%ad"}' --date=iso)" '$commits')"
 
-  EchoCommits:
+  HelloWorld:
     runs-on: ubuntu-latest
     needs: Commits
     steps:
-      run: echo "sup"
+      - name: Hello world
+        run: |
+          echo "Hello world"
+          echo "The commits are: ${{ needs.Commits.outputs.commits }}"
+          echo "The commits are: ${{ needs.Commits.outputs.commits }}"
 
   # Release:
   #   runs-on: ubuntu-latest
@@ -174,4 +178,5 @@ jobs:
   #         echo "The run id is: $GITHUB_RUN_ID"
   #         echo "The GitHub Actor's username is: $GITHUB_ACTOR"
   #         echo "GitHub SHA: $GITHUB_SHA"
+
 # wait wut
