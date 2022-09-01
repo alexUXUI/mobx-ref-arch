@@ -13,7 +13,7 @@ jobs:
       - name: Parse git commits
         id: parse-git-commits
         run: |
-          echo "::set-output name=commits::$(git log --format='%H' --no-merges -n 1)"
+          echo "::set-output name=commits::$(git log --pretty="%h|%s|%aN|%aE|%aD" --no-merges -n 1)"
       ## print the output
       - name: Print git commits
         run: |
@@ -26,7 +26,7 @@ jobs:
       - name: Hello world
         run: |
           echo "Hello world"
-          echo "The commits are: ${{ needs.Commits.outputs.commits }}"
+          echo "The commits are: ${{ steps.parse-git-commits.outputs.commits }}"
 
   # Release:
   #   runs-on: ubuntu-latest
