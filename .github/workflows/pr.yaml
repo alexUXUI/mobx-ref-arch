@@ -56,42 +56,42 @@ jobs:
           echo "Hello world"
           echo "The commits are: ${{ steps.parse-git-commits.outputs.commits }}"
 
-  # Release:
-  #   runs-on: ubuntu-latest
+  Release:
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: '0'
-  #       # - run: echo "Hello World"
-  #       name: Send custom JSON data to Slack workflow
-  #       id: slack
-  #     - uses: slackapi/slack-github-action@v1.18.0
-  #       with:
-  #         # For posting a rich message using Block Kit
-  #         payload: |
-  #           {
-  #             "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
-  #             "blocks": [
-  #               {
-  #                 "type": "section",
-  #                 "text": {
-  #                   "type": "mrkdwn",
-  #                   "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-  #                 }
-  #               },
-  #               {
-  #                 "type": "section",
-  #                 "text": {
-  #                   "type": "mrkdwn",
-  #                   "text": "test"
-  #                 }
-  #               }
-  #             ]
-  #           }
-  #       env:
-  #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-  #         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+        # - run: echo "Hello World"
+        name: Send custom JSON data to Slack workflow
+        id: slack
+      - uses: slackapi/slack-github-action@v1.18.0
+        with:
+          # For posting a rich message using Block Kit
+          payload: |
+            {
+              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ steps.parse-git-commits.outputs.commits }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
   # Cancel-Previous:
   #   runs-on: ubuntu-latest
   #   steps:
@@ -209,5 +209,4 @@ jobs:
   #         echo "The run id is: $GITHUB_RUN_ID"
   #         echo "The GitHub Actor's username is: $GITHUB_ACTOR"
   #         echo "GitHub SHA: $GITHUB_SHA"
-
 # wait wut
