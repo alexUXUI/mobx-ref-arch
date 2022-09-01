@@ -41,7 +41,7 @@ jobs:
       # print the output from the previous job
       - name: Print example output
         run: |
-          echo "${{ needs.ExampleOutput.outputs.example }}"
+          echo "${{ ExampleOutput.example.outputs.example }}"
 
   GetCommitsRelativeToTarget:
     runs-on: ubuntu-latest
