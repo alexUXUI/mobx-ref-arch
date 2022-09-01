@@ -68,7 +68,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Commits: ${{ join(needs.parse_commits.outputs.commits, "\n" }}"
+                    "text": "Commits: ${{ join(needs.parse_commits.outputs.commits, "\n") }}"
                   }
                 }
               ]
