@@ -17,7 +17,7 @@ jobs:
         id: parse
         run: |
           # Parse the commits and output the result
-          echo "::set-output name=commits::$(git log --format=%B --no-merges ${{ github.event.before }}..${{ github.event.after }})"
+          echo "::set-output name=commits::$(git log --pretty="%h|%s|%aN|%aE|%aD" --no-merges)"
 
   echo_commits:
     runs-on: ubuntu-latest
