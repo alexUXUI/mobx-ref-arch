@@ -15,9 +15,9 @@ jobs:
         run: |
           echo "::set-output name=commits::$(jq -Rn --argjson commits "$(git log --pretty=format:'{"sha":"%H","message":"%s","author":"%an","date":"%ad"}' --date=iso)" '$commits')"
 
-  Echo-Commits:
-    needs: Commits
+  EchoCommits:
     runs-on: ubuntu-latest
+    needs: Commits
     steps:
       run: echo "sup"
 
