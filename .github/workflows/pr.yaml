@@ -26,7 +26,7 @@ jobs:
       - name: Echo commits
         run: |
           # Use the output from the previous job
-          echo "${{ fromJSON(needs.parse_commits.outputs.commits) }}"
+          echo "${{ join(needs.parse_commits.outputs.commits) }}"
 
   Release:
     needs: [parse_commits, echo_commits]
