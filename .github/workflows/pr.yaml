@@ -23,7 +23,7 @@ jobs:
       - name: Echo commits
         run: |
           # Use the output from the previous job
-          echo "${{ join(needs.parse_commits.outputs.commits, "\n") }}"
+          echo "${{ join(needs.parse_commits.outputs.commits, '\n') }}"
 
   Release:
     needs: [parse_commits, echo_commits]
@@ -68,7 +68,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Commits: ${{ join(needs.parse_commits.outputs.commits, "\n") }}"
+                    "text": "Commits: ${{ join(needs.parse_commits.outputs.commits, '\n') }}"
                   }
                 }
               ]
