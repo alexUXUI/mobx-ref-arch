@@ -1,9 +1,9 @@
-import { RootStoreProvider } from "./context/stores.context";
-import { NotesTable } from "./features/notesTable/notesTable.component";
-import { CreateNote } from "./features/createNote/createNote.component";
-import "./App.css";
+import { RootStoreProvider } from './context/stores.context';
+import { NotesTable } from './features/notesTable/notesTable.component';
+import { CreateNote } from './features/createNote/createNote.component';
+import './App.css';
 
-// fake feature
+// feature B
 function App() {
   return (
     <RootStoreProvider>
