@@ -47,20 +47,16 @@ jobs:
         run: |
           echo "${{ steps.get-commits-relative-to-target.outputs.commits }}"
 
-  HelloWorld:
+  Release:
+    needs: GetCommitsRelativeToTarget
     runs-on: ubuntu-latest
-    needs: Commits
+
     steps:
       - name: Hello world
         run: |
           echo "Hello world"
           echo "The commits are: ${{ steps.parse-git-commits.outputs.commits }}"
 
-  Release:
-    needs: GetCommitsRelativeToTarget
-    runs-on: ubuntu-latest
-
-    steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: '0'
@@ -85,7 +81,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ${{ steps.parse-git-commits.outputs.commits }}
+                    "text":"TEST"
                   }
                 }
               ]
@@ -93,6 +89,7 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
   # Cancel-Previous:
   #   runs-on: ubuntu-latest
   #   steps:
