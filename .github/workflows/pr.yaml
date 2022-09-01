@@ -4,6 +4,30 @@ on: pull_request
 
 jobs:
   # create two jobs. The first job produces some output and the second job uses that output
+
+  parse_commits:
+    runs-on: ubuntu-latest
+    outputs:
+      # Define the output variable
+      commits: ${{ steps.parse.outputs.commits }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Parse commits
+        id: parse
+        run: |
+          # Parse the commits and output the result
+          echo "::set-output name=commits::$(git log --format=%B --no-merges ${{ github.event.before }}..${{ github.event.after }})"
+
+  echo_commits:
+    runs-on: ubuntu-latest
+    needs: parse_commits
+    steps:
+      - name: Echo commits
+        run: |
+          # Use the output from the previous job
+          echo "${{ needs.parse_commits.outputs.commits }}"
+
   first_job:
     runs-on: ubuntu-latest
     outputs:
