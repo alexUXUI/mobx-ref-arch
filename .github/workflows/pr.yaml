@@ -55,7 +55,7 @@ jobs:
       - name: Hello world
         run: |
           echo "Hello world"
-          echo "The commits are: ${{ steps.parse-git-commits.outputs.commits }}"
+          echo "The commits are: ${{ steps.get-commits-relative-to-target.outputs.commits }}"
 
       - uses: actions/checkout@v2
         with:
@@ -81,7 +81,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "The commits are: ${{ steps.parse-git-commits.outputs.commits }}"
+                    "text": "The commits are: ${{ steps.get-commits-relative-to-target.outputs.commits }}"
                   }
                 }
               ]
