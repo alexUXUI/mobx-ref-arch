@@ -47,6 +47,10 @@ jobs:
         run: |
           echo "${{ needs.GetCommitsRelativeToTarget.outputs.commits }}"
 
+      - name: Print the commit messsages from the previous step
+        run: |
+          echo "${{ steps.get-commits-relative-to-target.outputs.commits }}"
+
       #   name: Send custom JSON data to Slack workflow
       #   id: slack
       # - uses: slackapi/slack-github-action@v1.18.0
