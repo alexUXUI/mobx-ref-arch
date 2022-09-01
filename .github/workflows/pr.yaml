@@ -3,6 +3,18 @@ name: PR Workflow CI
 on: pull_request
 
 jobs:
+  Commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      ## iterate over the commits in the PR and convert them to json to be used in the next step
+      - name: Get commits
+        id: get_commits
+        run: |
+          echo "::set-output name=commits::$(jq -Rn --argjson commits "$(git log --pretty=format:'{"sha":"%H","message":"%s","author":"%an","date":"%ad"}' --date=iso)" '$commits')"
+
   Release:
     runs-on: ubuntu-latest
 
@@ -25,6 +37,13 @@ jobs:
                   "text": {
                     "type": "mrkdwn",
                     "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ steps.get_commits.commits }}"
                   }
                 }
               ]
