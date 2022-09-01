@@ -19,10 +19,7 @@ jobs:
     needs: Commits
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: '0'
-      run: echo "${{ needs.Commits.outputs.commits }}"
+      run: echo "sup"
 
   # Release:
   #   runs-on: ubuntu-latest
@@ -177,5 +174,4 @@ jobs:
   #         echo "The run id is: $GITHUB_RUN_ID"
   #         echo "The GitHub Actor's username is: $GITHUB_ACTOR"
   #         echo "GitHub SHA: $GITHUB_SHA"
-
 # wait wut
