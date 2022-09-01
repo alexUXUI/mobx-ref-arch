@@ -9,15 +9,15 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: '0'
-      ## iterate over the commits in the PR and convert them to json to be used in the next step
-      - name: Get commits
-        id: get_commits
+      ## parse the git commits to json and set the json as an output using shell script
+      - name: Parse git commits
+        id: parse-git-commits
         run: |
-          echo "::set-output name=commits::$(jq -Rn --argjson commits "$(git log --pretty=format:'{"sha":"%H","message":"%s","author":"%an","date":"%ad"}' --date=iso)" '$commits')"
-
-      ## echo the json to the console
-      - name: Echo commits
-        run: echo "${{ steps.get_commits.outputs.commits }}"
+          echo "::set-output name=commits::$(git log --format='%H' --no-merges -n 1)"
+      ## print the output
+      - name: Print git commits
+        run: |
+          echo "${{ steps.parse-git-commits.outputs.commits }}"
 
   HelloWorld:
     runs-on: ubuntu-latest
