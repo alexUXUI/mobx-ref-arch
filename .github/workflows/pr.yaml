@@ -61,35 +61,28 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": "Deploying new version ${{ fromJSON(needs.parse_package_version.outputs.version) }}"
+                    "text": "Deployed new version: ${{ fromJSON(needs.parse_package_version.outputs.version) }}"
                   }
                 },
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                    "text": "<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|View the PR>"
                   }
                 },
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Feature branch: ${{ github.event.pull_request.head.ref }}"
+                    "text": "`${{ github.event.pull_request.head.ref }}` -> `${{ github.event.pull_request.base.ref }}`"
                   }
                 },
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Target branch: ${{ github.event.pull_request.base.ref }}"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Commits: ${{ join(needs.parse_commits.outputs.commits, '\n') }}"
+                    "text": "Commit: ${{ join(needs.parse_commits.outputs.commits, '\n') }}"
                   }
                 }
               ]
