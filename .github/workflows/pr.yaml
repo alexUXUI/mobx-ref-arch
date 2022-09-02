@@ -16,17 +16,20 @@ jobs:
           # Parse the commits and output the result
           echo "::set-output name=commits::$(git log --pretty=tformat:"%s|%aN|%aD|%h" --no-merges)"
 
-  echo_commits:
+  parse_package_version:
     runs-on: ubuntu-latest
-    needs: parse_commits
+    outputs:
+      version: ${{ steps.parse.outputs.version }}
     steps:
-      - name: Echo commits
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Parse package version
+        id: parse
         run: |
-          # Use the output from the previous job
-          echo "${{ join(needs.parse_commits.outputs.commits, '\n') }}"
+          echo "::set-output name=version::$(npm pkg get version)"
 
   Release:
-    needs: [parse_commits, echo_commits]
+    needs: [parse_commits, parse_package_version]
     runs-on: ubuntu-latest
 
     steps:
@@ -41,7 +44,7 @@ jobs:
           # For posting a rich message using Block Kit
           payload: |
             {
-              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "text": "${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
               "blocks": [
                 {
                   "type": "section",
@@ -69,6 +72,13 @@ jobs:
                   "text": {
                     "type": "mrkdwn",
                     "text": "Commits: ${{ join(needs.parse_commits.outputs.commits, '\n') }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Package version: ${{ needs.parse_package_version.outputs.version }}"
                   }
                 }
               ]
