@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  parse_commits:
+  Parse_Commit:
     runs-on: ubuntu-latest
     outputs:
       commits: ${{ steps.parse.outputs.commits }}
@@ -20,10 +20,9 @@ jobs:
       - name: Parse commits
         id: parse
         run: |
-          # Parse the commits and output the result
-          echo "::set-output name=commits::$(git log --pretty=tformat:"%s|%aN|%aD|%h" --no-merges)"
+          echo "::set-output name=commits::$(git log --pretty=tformat:"%s" --no-merges)"
 
-  parse_package_version:
+  Parse_Version:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.parse.outputs.version }}
@@ -36,7 +35,7 @@ jobs:
           echo "::set-output name=version::$(npm pkg get version)"
 
   Release:
-    needs: [parse_commits, echo_commits]
+    needs: [Parse_Commit, Parse_Version]
     runs-on: ubuntu-latest
 
     steps:
@@ -49,51 +48,38 @@ jobs:
       - uses: slackapi/slack-github-action@v1.18.0
         with:
           # For posting a rich message using Block Kit
+          # try it out here: https://app.slack.com/block-kit-builder/
           payload: |
             {
               "text": "${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
               "blocks": [
                 {
-                  "type": "section",
+                  "type": "header",
                   "text": {
-                    "type": "mrkdwn",
-                    "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                    "type": "plain_text",
+                    "text": "Deployed Version: ${{ fromJSON(needs.Parse_Version.outputs.version) }}"
                   }
                 },
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Feature branch: ${{ github.event.pull_request.head.ref }}"
+                    "text": "${{ join(needs.Parse_Commit.outputs.commits, '\n') }}"
                   }
                 },
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Target branch: ${{ github.event.pull_request.base.ref }}"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Commits: ${{ join(needs.parse_commits.outputs.commits, '\n') }}"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Package version: ${{ needs.parse_package_version.outputs.version }}"
+                    "text": "<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|View the PR>"
                   }
                 }
+
               ]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_HOOK }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
   #     - uses: anothrNick/github-tag-action@1.36.0
   #       id: tag
   #       env:

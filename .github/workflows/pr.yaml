@@ -3,7 +3,7 @@ name: PR Workflow CI
 on: pull_request
 
 jobs:
-  parse_commits:
+  Parse_Commit:
     runs-on: ubuntu-latest
     outputs:
       commits: ${{ steps.parse.outputs.commits }}
@@ -13,10 +13,9 @@ jobs:
       - name: Parse commits
         id: parse
         run: |
-          # Parse the commits and output the result
           echo "::set-output name=commits::$(git log --pretty=tformat:"%s" --no-merges)"
 
-  parse_package_version:
+  Parse_Version:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.parse.outputs.version }}
@@ -28,19 +27,8 @@ jobs:
         run: |
           echo "::set-output name=version::$(npm pkg get version)"
 
-  echo_version:
-    runs-on: ubuntu-latest
-    needs: [parse_commits, parse_package_version]
-    steps:
-      - name: Echo version
-        run: |
-          echo "Version: ${{ needs.parse_package_version.outputs.version }}"
-      - name: Echo commits
-        run: |
-          echo "Commits: ${{ needs.parse_commits.outputs.commits }}"
-
   Release:
-    needs: [parse_commits, parse_package_version]
+    needs: [Parse_Commit, Parse_Version]
     runs-on: ubuntu-latest
 
     steps:
@@ -53,6 +41,7 @@ jobs:
       - uses: slackapi/slack-github-action@v1.18.0
         with:
           # For posting a rich message using Block Kit
+          # try it out here: https://app.slack.com/block-kit-builder/
           payload: |
             {
               "text": "${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
@@ -61,14 +50,14 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": "Deployed Version: ${{ fromJSON(needs.parse_package_version.outputs.version) }}"
+                    "text": "Deployed Version: ${{ fromJSON(needs.Parse_Version.outputs.version) }}"
                   }
                 },
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ join(needs.parse_commits.outputs.commits, '\n') }}"
+                    "text": "${{ join(needs.Parse_Commit.outputs.commits, '\n') }}"
                   }
                 },
                 {
