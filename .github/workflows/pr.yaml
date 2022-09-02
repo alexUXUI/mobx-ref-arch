@@ -14,7 +14,7 @@ jobs:
         id: parse
         run: |
           # Parse the commits and output the result
-          echo "::set-output name=commits::$(git log --pretty=tformat:"%s|%aN|%aD|%h" --no-merges)"
+          echo "::set-output name=commits::$(git log --pretty=tformat:"%s" --no-merges)"
 
   parse_package_version:
     runs-on: ubuntu-latest
@@ -61,7 +61,14 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": "Deployed new version: ${{ fromJSON(needs.parse_package_version.outputs.version) }}"
+                    "text": "Deployed Version: ${{ fromJSON(needs.parse_package_version.outputs.version) }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ join(needs.parse_commits.outputs.commits, '\n') }}"
                   }
                 },
                 {
@@ -70,21 +77,8 @@ jobs:
                     "type": "mrkdwn",
                     "text": "<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|View the PR>"
                   }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "`${{ github.event.pull_request.head.ref }}` -> `${{ github.event.pull_request.base.ref }}`"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Commit: ${{ join(needs.parse_commits.outputs.commits, '\n') }}"
-                  }
                 }
+
               ]
             }
         env:
