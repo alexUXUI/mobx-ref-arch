@@ -3,122 +3,192 @@ name: PR Workflow CI
 on: pull_request
 
 jobs:
-  Cancel-Previous:
+  Parse_Commit:
     runs-on: ubuntu-latest
+    outputs:
+      commits: ${{ steps.parse.outputs.commits }}
     steps:
-      - uses: styfle/cancel-workflow-action@0.9.1
-        with:
-          access_token: ${{ github.token }}
-
-  Install:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/deps-restore
-        id: cache-node-modules
-
-      - name: Download dependencies
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: yarn install --immutable
-
-  Lint:
-    needs: Install
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/deps-restore
-      - run: yarn lint
-
-  Test:
-    needs: Install
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/deps-restore
-      - run: yarn test
-
-  Build:
-    needs: Install
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/deps-restore
-      - uses: ./.github/actions/build-restore
-        id: cache-build
-
-      - name: Create New Build
-        if: steps.cache-build.outputs.cache-hit != 'true'
-        run: yarn build
-
-      - name: Upload Build Artifact
-        run: ls -la
-      - uses: actions/upload-artifact@v3
-        with:
-          name: build-${{ github.sha }}
-          path: ./build/
-
-  Download-Artifacts:
-    needs: Build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
-      - name: Display structure of downloaded files
-        run: ls -R
-
-  Changed-Files:
-    runs-on: ubuntu-latest # windows-latest | macos-latest
-    name: Test changed-files
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # OR "2" -> To retrieve the preceding commit.
-
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v23.2
-
-      - name: List all changed files
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Parse commits
+        id: parse
         run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done
+          echo "::set-output name=commits::$(git log --pretty=tformat:"%s" --no-merges)"
 
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJson(job) }}
-        run: echo "$JOB_CONTEXT"
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJson(steps) }}
-        run: echo "$STEPS_CONTEXT"
-      - name: Dump runner context
-        env:
-          RUNNER_CONTEXT: ${{ toJson(runner) }}
-        run: echo "$RUNNER_CONTEXT"
-      - name: Dump strategy context
-        env:
-          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
-        run: echo "$STRATEGY_CONTEXT"
-      - name: Dump matrix context
-        env:
-          MATRIX_CONTEXT: ${{ toJson(matrix) }}
-        run: echo "$MATRIX_CONTEXT"
-
-      - name: Show default environment variables
+  Parse_Version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.parse.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Parse package version
+        id: parse
         run: |
-          echo "The job_id is: $GITHUB_JOB"   # reference the default environment variables
-          echo "The id of this action is: $GITHUB_ACTION"   # reference the default environment variables
-          echo "The run id is: $GITHUB_RUN_ID"
-          echo "The GitHub Actor's username is: $GITHUB_ACTOR"
-          echo "GitHub SHA: $GITHUB_SHA"
+          echo "::set-output name=version::$(npm pkg get version)"
 
-# wait wut
+  Release:
+    needs: [Parse_Commit, Parse_Version]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+
+        name: Send custom JSON data to Slack workflow
+        id: slack
+      - uses: slackapi/slack-github-action@v1.18.0
+        with:
+          # For posting a rich message using Block Kit
+          # try it out here: https://app.slack.com/block-kit-builder/
+          payload: |
+            {
+              "text": "${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Deployed Version: ${{ fromJSON(needs.Parse_Version.outputs.version) }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ join(needs.Parse_Commit.outputs.commits, '\n') }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|View the PR>"
+                  }
+                }
+
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_HOOK }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+#   Cancel-Previous:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: styfle/cancel-workflow-action@0.9.1
+#         with:
+#           access_token: ${{ github.token }}
+
+#   Install:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: ./.github/actions/deps-restore
+#         id: cache-node-modules
+
+#       - name: Download dependencies
+#         if: steps.cache-node-modules.outputs.cache-hit != 'true'
+#         run: yarn install --immutable
+
+#   Lint:
+#     needs: Install
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: ./.github/actions/deps-restore
+#       - run: yarn lint
+
+#   Test:
+#     needs: Install
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: ./.github/actions/deps-restore
+#       - run: yarn test
+
+#   Build:
+#     needs: Install
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: ./.github/actions/deps-restore
+#       - uses: ./.github/actions/build-restore
+#         id: cache-build
+
+#       - name: Create New Build
+#         if: steps.cache-build.outputs.cache-hit != 'true'
+#         run: yarn build
+
+#       - name: Upload Build Artifact
+#         run: ls -la
+#       - uses: actions/upload-artifact@v3
+#         with:
+#           name: build-${{ github.sha }}
+#           path: ./build/
+
+#   Download-Artifacts:
+#     needs: Build
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: actions/download-artifact@v3
+#       - name: Display structure of downloaded files
+#         run: ls -R
+
+#   Changed-Files:
+#     runs-on: ubuntu-latest # windows-latest | macos-latest
+#     name: Test changed-files
+#     steps:
+#       - uses: actions/checkout@v3
+#         with:
+#           fetch-depth: 0 # OR "2" -> To retrieve the preceding commit.
+
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v23.2
+
+#       - name: List all changed files
+#         run: |
+#           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+#             echo "$file was changed"
+#           done
+
+#       - name: Dump GitHub context
+#         env:
+#           GITHUB_CONTEXT: ${{ toJson(github) }}
+#         run: echo "$GITHUB_CONTEXT"
+#       - name: Dump job context
+#         env:
+#           JOB_CONTEXT: ${{ toJson(job) }}
+#         run: echo "$JOB_CONTEXT"
+#       - name: Dump steps context
+#         env:
+#           STEPS_CONTEXT: ${{ toJson(steps) }}
+#         run: echo "$STEPS_CONTEXT"
+#       - name: Dump runner context
+#         env:
+#           RUNNER_CONTEXT: ${{ toJson(runner) }}
+#         run: echo "$RUNNER_CONTEXT"
+#       - name: Dump strategy context
+#         env:
+#           STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+#         run: echo "$STRATEGY_CONTEXT"
+#       - name: Dump matrix context
+#         env:
+#           MATRIX_CONTEXT: ${{ toJson(matrix) }}
+#         run: echo "$MATRIX_CONTEXT"
+
+#       - name: Show default environment variables
+#         run: |
+#           echo "The job_id is: $GITHUB_JOB"   # reference the default environment variables
+#           echo "The id of this action is: $GITHUB_ACTION"   # reference the default environment variables
+#           echo "The run id is: $GITHUB_RUN_ID"
+#           echo "The GitHub Actor's username is: $GITHUB_ACTOR"
+#           echo "GitHub SHA: $GITHUB_SHA"
+
+# # wait wut
