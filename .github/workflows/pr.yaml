@@ -74,13 +74,6 @@ jobs:
                     "text": "Commits: ${{ join(needs.parse_commits.outputs.commits, '\n') }}"
                   }
                 },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Package version: ${{ needs.parse_package_version.outputs.version }}"
-                  }
-                }
               ]
             }
         env:
