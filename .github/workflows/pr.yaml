@@ -60,7 +60,7 @@ jobs:
                 {
                   "type": "header",
                   "text": {
-                    "type": "mrkdwn",
+                    "type": "plain_text",
                     "text": "Deploying new version ${{ fromJSON(needs.parse_package_version.outputs.version) }}"
                   }
                 },
