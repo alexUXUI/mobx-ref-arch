@@ -73,7 +73,7 @@ jobs:
                     "type": "mrkdwn",
                     "text": "Commits: ${{ join(needs.parse_commits.outputs.commits, '\n') }}"
                   }
-                },
+                }
               ]
             }
         env:
