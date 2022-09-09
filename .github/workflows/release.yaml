@@ -114,7 +114,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ git log ${{ github.event.after }}...${{ github.event.before }} --pretty=format:"%s" }} - ${{ github.event.head_commit.author.name }}"
+                    "text": "${{ git log ${{ github.event.after }}...${{ github.event.before }} --pretty=format:'%s' }} - ${{ github.event.head_commit.author.name }}"
                   }
                 },      
                 {
