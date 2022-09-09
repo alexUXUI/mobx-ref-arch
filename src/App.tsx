@@ -5,6 +5,7 @@ import './App.css';
 
 // adds feature 1
 
+// adds feature b
 function App() {
   return (
     <RootStoreProvider>
