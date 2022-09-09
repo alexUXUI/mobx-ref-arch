@@ -114,7 +114,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Before: ${{ github.event.before }} After: ${{ github.event.after }} before and after commits: ${{ git log ${{ github.event.after }}...${{ github.event.before }} --pretty=format:'%s' }}"
+                    "text": "Before: ${{ github.event.before }} After: ${{ github.event.after }} before and after commits: ${{ fromJSON(needs.Compare_Before_And_After_Commits.outputs.diff) }}"
                   }
                 },      
                 {
