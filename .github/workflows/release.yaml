@@ -114,7 +114,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "hello!"
+                    "text": "Before: ${{ github.event.before }}"
                   }
                 },      
                 {
