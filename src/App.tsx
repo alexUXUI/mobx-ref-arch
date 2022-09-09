@@ -4,6 +4,7 @@ import { CreateNote } from './features/createNote/createNote.component';
 import './App.css';
 
 // adds feature 1
+// adds feat a
 
 function App() {
   return (
