@@ -12,6 +12,17 @@ permissions:
   pull-requests: write
 
 jobs:
+  Generate_Diff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Generate Diff
+        run: |
+          git log ${{ github.event.after }}...${{ github.event.before }} --pretty=format:"%s"
+
   Compare_Before_And_After_Commits:
     runs-on: ubuntu-latest
     steps:
@@ -21,7 +32,7 @@ jobs:
           fetch-depth: 0
       - name: Compare Before And After Commits
         run: |
-          echo "::set-output name=diff::$(git log github.event.after...github.event.before --pretty=format:"%s")"
+          echo "::set-output name=diff::$(git log ${{ github.event.after }}...${{ github.event.before }} --pretty=format:"%s")"
 
   Echo_Commits:
     runs-on: ubuntu-latest
