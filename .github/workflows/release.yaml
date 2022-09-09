@@ -114,9 +114,9 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ join(needs.Parse_Commits.outputs.commits, '\n') }} - ${{ github.event.head_commit.author.name }}"
+                    "text": "${{ join(git log ${{ github.event.after }}...${{ github.event.before }} --pretty=format:"%s", '\n') }} - ${{ github.event.head_commit.author.name }}"
                   }
-                },
+                },      
                 {
                   "type": "section",
                   "text": {
