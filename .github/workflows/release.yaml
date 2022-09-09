@@ -12,16 +12,16 @@ permissions:
   pull-requests: write
 
 jobs:
-  Generate_Diff:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Generate Diff
-        run: |
-          git log ${{ github.event.after }}...${{ github.event.before }} --pretty=format:"%s"
+  # Generate_Diff:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Generate Diff
+  #       run: |
+  #         git log ${{ github.event.after }}...${{ github.event.before }} --pretty=format:"%s"
 
   Compare_Before_And_After_Commits:
     runs-on: ubuntu-latest
@@ -31,6 +31,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Compare Before And After Commits
+        id: compare
         run: |
           echo "::set-output name=diff::$(git log ${{ github.event.after }}...${{ github.event.before }})"
 
@@ -49,16 +50,6 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
-
-  Get_Main_Head:
-    runs-on: ubuntu-latest
-    outputs:
-      main_head: ${{ steps.get-main-head.outputs.main_head }}
-    steps:
-      - name: Get Main Head
-        id: get-main-head
-        run: |
-          echo "::set-output name=main_head::$(git rev-parse HEAD)"
 
   Parse_Commits:
     runs-on: ubuntu-latest
