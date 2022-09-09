@@ -32,7 +32,7 @@ jobs:
           fetch-depth: 0
       - name: Compare Before And After Commits
         run: |
-          echo "::set-output name=diff::$(git log ${{ github.event.after }}...${{ github.event.before }} --pretty=format:'%s')"
+          echo "::set-output name=diff::$(git log ${{ github.event.after }}...${{ github.event.before }})"
 
   Echo_Commits:
     runs-on: ubuntu-latest
