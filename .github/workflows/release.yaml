@@ -12,17 +12,6 @@ permissions:
   pull-requests: write
 
 jobs:
-  # Generate_Diff:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Generate Diff
-  #       run: |
-  #         git log ${{ github.event.after }}...${{ github.event.before }} --pretty=format:"%s"
-
   Compare_Before_And_After_Commits:
     runs-on: ubuntu-latest
     steps:
@@ -51,18 +40,6 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-  Parse_Commits:
-    runs-on: ubuntu-latest
-    outputs:
-      commits: ${{ steps.parse.outputs.commits }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Parse commits
-        id: parse
-        run: |
-          echo "::set-output name=commits::$(git log --pretty=tformat:"%s" --no-merges)"
-
   Parse_Version:
     runs-on: ubuntu-latest
     outputs:
@@ -76,7 +53,7 @@ jobs:
           echo "::set-output name=version::$(npm pkg get version)"
 
   Release:
-    needs: [Parse_Commits, Parse_Version, Compare_Before_And_After_Commits]
+    needs: [Parse_Version, Compare_Before_And_After_Commits]
     runs-on: ubuntu-latest
 
     steps:
