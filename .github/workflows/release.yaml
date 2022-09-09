@@ -61,11 +61,6 @@ jobs:
         with:
           fetch-depth: '0'
 
-        name: generate diff
-        id: diff
-        run: |
-          echo "::set-output name=diff::$(git log ${{ github.event.after }}...${{ github.event.before }} --pretty=format:'%s')"      
-
         name: Send custom JSON data to Slack workflow
         id: slack
       - uses: slackapi/slack-github-action@v1.18.0
