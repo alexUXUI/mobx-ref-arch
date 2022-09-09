@@ -3,8 +3,8 @@ name: Test ENV CD Workflow
 on:
   push:
     branches:
-      - "test"
-      - "main"
+      - 'test'
+      - 'main'
 
 jobs:
   Install:
@@ -40,30 +40,30 @@ jobs:
           name: build-${{ github.sha }}
           path: ./build/
 
-  GCP-Upload:
-    needs: Build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: "read"
-      id-token: "write"
+  # GCP-Upload:
+  #   needs: Build
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: "read"
+  #     id-token: "write"
 
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
-      - uses: ./.github/actions/deps-restore
-      - uses: ./.github/actions/build-restore
-        id: cache-build
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/download-artifact@v3
+  #     - uses: ./.github/actions/deps-restore
+  #     - uses: ./.github/actions/build-restore
+  #       id: cache-build
 
-      - name: Create New Build
-        if: steps.cache-build.outputs.cache-hit != 'true'
-        run: yarn build
+  #     - name: Create New Build
+  #       if: steps.cache-build.outputs.cache-hit != 'true'
+  #       run: yarn build
 
-      - uses: "google-github-actions/auth@v0"
-        with:
-          workload_identity_provider: "projects/667117874450/locations/global/workloadIdentityPools/gh-pool/providers/github"
-          service_account: "gh-oidc@ps-ref-arch.iam.gserviceaccount.com"
+  #     - uses: "google-github-actions/auth@v0"
+  #       with:
+  #         workload_identity_provider: "projects/667117874450/locations/global/workloadIdentityPools/gh-pool/providers/github"
+  #         service_account: "gh-oidc@ps-ref-arch.iam.gserviceaccount.com"
 
-      - uses: "google-github-actions/upload-cloud-storage@v0"
-        with:
-          path: ./build-${{ github.sha }}
-          destination: "ps-ref-arch-web-client/"
+  #     - uses: "google-github-actions/upload-cloud-storage@v0"
+  #       with:
+  #         path: ./build-${{ github.sha }}
+  #         destination: "ps-ref-arch-web-client/"
