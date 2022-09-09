@@ -4,13 +4,33 @@ on:
   push:
     branches:
       - main
+      - release
+      - test
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  Parse_Commit:
+  Dump_Action_Environment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub Action Environment
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+  Get_Main_Head:
+    runs-on: ubuntu-latest
+    outputs:
+      main_head: ${{ steps.get-main-head.outputs.main_head }}
+    steps:
+      - name: Get Main Head
+        id: get-main-head
+        run: |
+          echo "::set-output name=main_head::$(git rev-parse HEAD)"
+
+  Parse_Commits:
     runs-on: ubuntu-latest
     outputs:
       commits: ${{ steps.parse.outputs.commits }}
@@ -35,7 +55,7 @@ jobs:
           echo "::set-output name=version::$(npm pkg get version)"
 
   Release:
-    needs: [Parse_Commit, Parse_Version]
+    needs: [Parse_Commits, Parse_Version]
     runs-on: ubuntu-latest
 
     steps:
@@ -64,7 +84,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ join(needs.Parse_Commit.outputs.commits, '\n') }} - ${{ github.event.head_commit.author.name }}"
+                    "text": "${{ join(needs.Parse_Commits.outputs.commits, '\n') }} - ${{ github.event.head_commit.author.name }}"
                   }
                 },
                 {
@@ -80,49 +100,3 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_HOOK }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-  #     - uses: anothrNick/github-tag-action@1.36.0
-  #       id: tag
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         WITH_V: true
-
-  #     - uses: release-drafter/release-drafter@v5
-  #       id: draft
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         commitish: 'main'
-  #         tag: ${{ steps.tag.outputs.tag }}
-  #         prerelease: true
-
-  #     - run: echo "${{ steps.draft.outputs.body }}"
-  #     - run: echo "${{ steps.tag.outputs.tag }}"
-
-  #     - uses: softprops/action-gh-release@v1
-  #       with:
-  #         tag_name: ${{ steps.tag.outputs.tag }}
-
-  # Custom-Slack-Notification:
-  #   needs: Release
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: alexuxui/slacktion@v3.0
-  #       with:
-  #         url: ${{ secrets.SLACK_WEBHOOK_URL }}
-  #         token: ${{ secrets.TOKEN }}
-  #         body: ${{ steps.draft.outputs.body }}
-
-  # Notify-Slack:
-  #   needs: Release
-  #   name: Slack Notification
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Slack Notification
-  #       uses: rtCamp/action-slack-notify@v2
-  #       env:
-  #         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-  #         SLACK_MESSAGE: ${{ steps.draft.outputs.body }}
-  #         SLACK_ICON: https://assets.website-files.com/6166408856602addeee5f874/627d940d412b116983a4ad07_footer_logo.svg
-  #         SLACK_FOOTER: 'test footer'
-  #         SLACK_COLOR: ${{ job.status }}
-  #         MSG_MINIMAL: commit
