@@ -85,7 +85,7 @@ jobs:
           echo "::set-output name=version::$(npm pkg get version)"
 
   Release:
-    needs: [Parse_Commits, Parse_Version]
+    needs: [Parse_Commits, Parse_Version, Compare_Before_And_After_Commits]
     runs-on: ubuntu-latest
 
     steps:
@@ -114,7 +114,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Before: ${{ github.event.before }} After: ${{ github.event.after }} before and after commits: ${{ fromJSON(needs.Compare_Before_And_After_Commits.outputs.diff) }}"
+                    "text": "Before: ${{ github.event.before }} After: ${{ github.event.after }} before and after commits: ${{ needs.Compare_Before_And_After_Commits.outputs.diff }}"
                   }
                 },      
                 {
