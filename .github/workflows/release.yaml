@@ -33,7 +33,7 @@ jobs:
       - name: Generate Git Log Output
         id: git_log
         run: |
-          MY_VAR = git log ${{ github.event.after }}...${{ github.event.before }}
+          MY_VAR=$(git log ${{ github.event.after }}...${{ github.event.before }})
           echo "output=MY_VAR" >> $GITHUB_ENV
           echo "::set-output name=outdated::$MY_VAR"
 
