@@ -12,20 +12,19 @@ permissions:
   pull-requests: write
 
 jobs:
-
   Git_Log_JSON:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout 
+      - name: checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      
+
       - name: set JSON output
         id: git_log_json
         run: |
           echo "::set-output name=git_log_json::$(git --no-pager log --pretty=format:'{"commit":"%H","author":"%an","date":"%ad","message":"%s"},' --date=short)"
-  
+
   Echo_Git_Log_JSON:
     needs: Git_Log_JSON
     runs-on: ubuntu-latest
@@ -33,30 +32,6 @@ jobs:
       - name: Echo Git Log JSON
         run: |
           echo ${{ needs.Git_Log_JSON.outputs.git_log_json }}
-
-  Git_Log:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: log
-        id: log
-        run: |
-          if [[ $1 != '' ]]
-          then
-          echo "tag is $1"
-          log=$(git log $1.. --pretty=format:'- %cd %an \n  %s\n \n' --date=format:'%Y-%m-%d %H:%M:%S')
-          echo $log
-          echo ::set-output name=log::$log
-  
-  Echo_Git_Log_Output:
-    runs-on: ubuntu-latest
-    needs: Git_Log
-    steps:
-      - name: Echo Git Log Output
-        run: echo "${{ needs.Git_Log.outputs.log }}"
 
   Show_Author:
     runs-on: ubuntu-latest
