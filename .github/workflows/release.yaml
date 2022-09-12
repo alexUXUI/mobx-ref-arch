@@ -23,28 +23,28 @@ jobs:
         id: step_two
         run: echo "${{ env.action_state }}" # This will output 'yellow'
 
-  # Generate_Git_Log_Output:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Generate Git Log Output
-  #       id: git_log
-  #       run: |
-  #         MY_VAR = git log ${{ github.event.after }}...${{ github.event.before }}
-  #         echo "output=MY_VAR" >> $GITHUB_ENV
-  #         echo "::set-output name=outdated::$MY_VAR"
+  Generate_Git_Log_Output:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Generate Git Log Output
+        id: git_log
+        run: |
+          MY_VAR = git log ${{ github.event.after }}...${{ github.event.before }}
+          echo "output=MY_VAR" >> $GITHUB_ENV
+          echo "::set-output name=outdated::$MY_VAR"
 
-  # Echo_Git_Log_Output:
-  #   runs-on: ubuntu-latest
-  #   needs: Generate_Git_Log_Output
-  #   steps:
-  #     - name: Echo Git Log Output
-  #       run: |
-  #         echo "${{ env.output }}"
-  #         echo "${{ needs.Generate_Git_Log_Output.outputs.outdated }}"
+  Echo_Git_Log_Output:
+    runs-on: ubuntu-latest
+    needs: Generate_Git_Log_Output
+    steps:
+      - name: Echo Git Log Output
+        run: |
+          echo "${{ env.output }}"
+          echo "${{ needs.Generate_Git_Log_Output.outputs.outdated }}"
 
   Generate_Diff:
     runs-on: ubuntu-latest
