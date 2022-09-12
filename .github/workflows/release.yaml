@@ -24,7 +24,7 @@ jobs:
       - name: set JSON output
         id: git_log_json
         run: |
-          echo "::set-output name=git_log_json::$(git log --pretty=format:'{"commit":"%H","author":"%an","date":"%ad","message":"%s"},' --date=short)"
+          echo "::set-output name=git_log_json::$(git --no-pager log --pretty=format:'{"commit":"%H","author":"%an","date":"%ad","message":"%s"},' --date=short)"
   
   Echo_Git_Log_JSON:
     needs: Git_Log_JSON
