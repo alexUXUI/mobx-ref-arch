@@ -12,6 +12,16 @@ permissions:
   pull-requests: write
 
 jobs:
+  Rando:
+    steps:
+      - name: Set the value
+        id: step_one
+        run: echo "action_state=yellow" >> $GITHUB_ENV
+
+      - name: Use the value
+        id: step_two
+        run: echo "${{ env.action_state }}" # This will output 'yellow'
+
   Generate_Git_Log_Output:
     runs-on: ubuntu-latest
     steps:
@@ -21,8 +31,10 @@ jobs:
           fetch-depth: 0
       - name: Generate Git Log Output
         id: git_log
-        run: >-
-          echo "::set-output name=git_log::$(git log --pretty=format:'%s' --no-merges --reverse)"
+        run: |
+          MY_VAR = git log ${{ github.event.after }}...${{ github.event.before }}
+          echo "output=MY_VAR" >> $GITHUB_ENV
+          echo "::set-output name=outdated::$MY_VAR"
 
   Echo_Git_Log_Output:
     runs-on: ubuntu-latest
@@ -30,7 +42,8 @@ jobs:
     steps:
       - name: Echo Git Log Output
         run: |
-          echo "${{ needs.Generate_Git_Log_Output.outputs.git_log }}"
+          echo "${{ env.output }}"
+          echo "${{ needs.Generate_Git_Log_Output.outputs.outdated }}"
 
   Generate_Diff:
     runs-on: ubuntu-latest
