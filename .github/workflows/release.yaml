@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
       - name: Generate Git Log Output
         id: git_log
-        run: |
+        run: >-
           echo "::set-output name=git_log::$(git log --pretty=format:'%s' --no-merges --reverse)"
 
   Echo_Git_Log_Output:
