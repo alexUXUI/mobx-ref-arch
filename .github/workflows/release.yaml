@@ -12,6 +12,16 @@ permissions:
   pull-requests: write
 
 jobs:
+  Show_Author:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: show author
+        run: git show -s --format=%an
+
   Get_Author:
     runs-on: ubuntu-latest
     steps:
