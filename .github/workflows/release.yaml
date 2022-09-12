@@ -12,7 +12,19 @@ permissions:
   pull-requests: write
 
 jobs:
+  Generate_Diff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Generate Diff
+        run: |
+          echo git log ${{ github.event.after }}...${{ github.event.before }} --pretty=format:'%s' --reverse
+
   Compare_Before_And_After_Commits:
+    needs: Generate_Diff
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
