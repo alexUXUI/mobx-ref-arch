@@ -12,6 +12,24 @@ permissions:
   pull-requests: write
 
 jobs:
+  Get_Author:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Get author name
+        id: author
+        run: echo "::set-output name=author::$(git show -s --format=%an)"
+
+  Echo_Author:
+    runs-on: ubuntu-latest
+    needs: Get_Author
+    steps:
+      - name: Echo author name
+        run: echo ${{ needs.Get_Author.outputs.author }}
+
   Rando:
     runs-on: ubuntu-latest
     steps:
