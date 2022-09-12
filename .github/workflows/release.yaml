@@ -18,9 +18,7 @@ jobs:
     steps:
       # To use this repository's private action,
       # you must check out the repository
-      - name: Checkout
         uses: actions/checkout@v3
-      - name: Hello world action step
         uses: ./actions/diff-log-parser # Uses an action in the root directory
         id: hello
       # Use the output from the `hello` step
