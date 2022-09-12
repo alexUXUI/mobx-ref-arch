@@ -1,0 +1,8 @@
+name: 'Git log parser'
+description: 'Get the git log info'
+outputs:
+  logs: # id of output
+    description: 'The git commit logs'
+runs:
+  using: 'node16'
+  main: 'index.js'
