@@ -156,9 +156,9 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Diff: ${{ fromJSON(needs.Compare_Before_And_After_Commits.outputs.diff) }}"
+                    "text": "<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|View the PR>"
                   }
-                },      
+                },
                 {
                   "type": "section",
                   "text": {
@@ -166,7 +166,6 @@ jobs:
                     "text": "<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|View the PR>"
                   }
                 }
-
               ]
             }
         env:
