@@ -12,6 +12,28 @@ permissions:
   pull-requests: write
 
 jobs:
+
+  Git_Log_JSON:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout 
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+      - name: set JSON output
+        id: git_log_json
+        run: |
+          echo "::set-output name=git_log_json::$(git log --pretty=format:'{"commit":"%H","author":"%an","date":"%ad","message":"%s"},' --date=short)"
+  
+  Echo_Git_Log_JSON:
+    needs: Git_Log_JSON
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo Git Log JSON
+        run: |
+          echo ${{ needs.Git_Log_JSON.outputs.git_log_json }}
+
   Git_Log:
     runs-on: ubuntu-latest
     steps:
