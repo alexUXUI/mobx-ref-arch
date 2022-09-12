@@ -12,6 +12,38 @@ permissions:
   pull-requests: write
 
 jobs:
+  Git_Log:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: log
+        id: log
+        run: |
+          if [[ $1 != '' ]]
+          then
+          echo "tag is $1"
+          log=$(git log $1.. --pretty=format:'- %cd %an \n  %s\n \n' --date=format:'%Y-%m-%d %H:%M:%S')
+
+          else
+          tagName=$(git describe --abbrev=0 --tags)
+          echo "tag is $tagName"
+          log=$(git log $tagName.. --pretty=format:'- %cd %an \n  %s\n \n' --date=format:'%Y-%m-%d %H:%M:%S')
+
+          fi
+
+          echo $log
+          echo ::set-output name=log::$log
+  
+  Echo_Git_Log_Output:
+    runs-on: ubuntu-latest
+    needs: Git_Log
+    steps:
+      - name: Echo Git Log Output
+        run: echo "${{ needs.Git_Log.outputs.log }}"
+
   Show_Author:
     runs-on: ubuntu-latest
     steps:
