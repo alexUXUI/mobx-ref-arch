@@ -20,7 +20,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: show author
-        run: git show --no-pager -s --format=%an | less -F
+        run: git --no-pager show -s --format=%an | less -F
 
   Get_Author:
     runs-on: ubuntu-latest
@@ -61,7 +61,7 @@ jobs:
       - name: Generate Git Log Output
         id: git_log
         run: |
-          MY_VAR=$(git log ${{ github.event.after }}...${{ github.event.before }})
+          MY_VAR=$(git --no-pager log ${{ github.event.after }}...${{ github.event.before }})
           echo "output=MY_VAR" >> $GITHUB_ENV
           echo "::set-output name=outdated::$MY_VAR"
 
@@ -83,7 +83,7 @@ jobs:
           fetch-depth: 0
       - name: Generate Diff
         run: |
-          echo git log ${{ github.event.after }}...${{ github.event.before }} --pretty=format:'%s' --reverse
+          echo git --no-pager log ${{ github.event.after }}...${{ github.event.before }} --pretty=format:'%s' --reverse
 
   Compare_Before_And_After_Commits:
     needs: Generate_Diff
