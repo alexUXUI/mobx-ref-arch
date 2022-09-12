@@ -20,7 +20,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: show author
-        run: git show --no-pager -s --format=%an | less F
+        run: git show --no-pager -s --format=%an | less -F
 
   Get_Author:
     runs-on: ubuntu-latest
@@ -31,7 +31,7 @@ jobs:
           fetch-depth: 0
       - name: Get author name
         id: author
-        run: echo "::set-output name=author::$(git show -s --format=%an | less F)"
+        run: echo "::set-output name=author::$(git show -s --format=%an | less -F)"
 
   Echo_Author:
     runs-on: ubuntu-latest
