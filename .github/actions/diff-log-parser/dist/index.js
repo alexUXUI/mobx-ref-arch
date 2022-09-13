@@ -10979,9 +10979,12 @@ try {
         output += data.toString();
       },
     };
+
+    const diffString = `${beforeCommit}..${afterCommit}`;
+
     await exec.exec(
       'git',
-      ['log', `${afterCommit}...${beforeCommit}`, '--pretty=format:"%s"'],
+      ['log', diffString, '--pretty=format:"%s"'],
       options
     );
     core.setOutput('logs', output);
