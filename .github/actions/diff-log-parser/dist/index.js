@@ -10968,8 +10968,8 @@ try {
 
   // run git log in exec
   const generateLog = async () => {
-    const options = {};
-    const output = '';
+    let options = {};
+    let output = '';
     options.listeners = {
       stdout: (data) => {
         console.log(data.toString());
