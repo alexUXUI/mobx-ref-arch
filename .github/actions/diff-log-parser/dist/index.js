@@ -10980,7 +10980,7 @@ try {
       },
     };
 
-    const diffString = `${beforeCommit}..${afterCommit}`;
+    const diffString = `${afterCommit}...${beforeCommit}`;
 
     await exec.exec(
       'git',
