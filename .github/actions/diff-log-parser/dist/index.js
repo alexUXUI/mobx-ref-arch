@@ -10966,6 +10966,9 @@ try {
   const payload = JSON.stringify(github.context.payload, undefined, 2);
   console.log(`The event payload: ${payload}`);
 
+  const beforeCommit = github.context.payload.before;
+  const afterCommit = github.context.payload.after;
+
   // run git log in exec
   const generateLog = async () => {
     let options = {};
@@ -10978,7 +10981,7 @@ try {
     };
     await exec.exec(
       'git',
-      ['log', '--name-only', '--pretty=format:"%H"'],
+      ['log', `${afterCommit}...${beforeCommit}`, '--pretty=format:"%s"'],
       options
     );
     core.setOutput('logs', output);
