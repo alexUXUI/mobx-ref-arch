@@ -20,6 +20,8 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Get the git log
         uses: ./.github/actions/diff-log-parser # Uses an action in the root directory
         id: logs
