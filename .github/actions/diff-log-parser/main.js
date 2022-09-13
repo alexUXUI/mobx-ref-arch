@@ -27,6 +27,8 @@ try {
     core.setOutput('logs', output);
     console.log(output);
   };
+
+  generateLog();
 } catch (error) {
   core.setFailed(error.message);
 }
