@@ -20,9 +20,9 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Hello world action step
+      - name: Get the git log
         uses: ./.github/actions/diff-log-parser # Uses an action in the root directory
-        id: hello
+        id: logs
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.logs }}"
