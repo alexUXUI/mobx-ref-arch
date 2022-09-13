@@ -5,4 +5,4 @@ outputs:
     description: 'The git commit logs'
 runs:
   using: 'node16'
-  main: 'main.js'
+  main: './dist/index.js'
