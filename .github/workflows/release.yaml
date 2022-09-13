@@ -25,7 +25,7 @@ jobs:
         id: logs
       # Use the output from the `hello` step
       - name: Get the output logs
-        run: echo "The git logs are: ${{ steps.logs.outputs.logs }}"
+        run: echo "The git logs are: ${{ steps.hello.outputs.logs }}"
 
   # Git_Log_JSON:
   #   runs-on: ubuntu-latest
@@ -199,7 +199,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{steps.logs.outputs.logs}}"
+                    "text": "test 123"
                   }
                 }
               ]
