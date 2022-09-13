@@ -199,7 +199,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "test"
+                    "text": "${{ steps.hello.outputs.logs }}"
             }
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_HOOK }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
