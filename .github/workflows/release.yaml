@@ -24,8 +24,8 @@ jobs:
         uses: ./.github/actions/diff-log-parser # Uses an action in the root directory
         id: hello
       # Use the output from the `hello` step
-      - name: Get the output logs
-        run: echo "The git logs are: ${{ steps.hello.outputs.logs }}"
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.logs }}"
 
   # Git_Log_JSON:
   #   runs-on: ubuntu-latest
@@ -199,7 +199,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "test 123"
+                    "text": "test"
                   }
                 }
               ]
