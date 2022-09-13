@@ -10,20 +10,23 @@ try {
   console.log(`The event payload: ${payload}`);
 
   // run git log in exec
-  const options = {};
-  const output = '';
-  options.listeners = {
-    stdout: (data) => {
-      console.log(data.toString());
-      output += data.toString();
-    },
+  const generateLog = async () => {
+    const options = {};
+    const output = '';
+    options.listeners = {
+      stdout: (data) => {
+        console.log(data.toString());
+        output += data.toString();
+      },
+    };
+    await exec.exec(
+      'git',
+      ['log', '--name-only', '--pretty=format:"%H"'],
+      options
+    );
+    core.setOutput('logs', output);
+    console.log(output);
   };
-  await exec.exec(
-    'git',
-    ['log', '--name-only', '--pretty=format:"%H"'],
-    options
-  );
-  core.setOutput('logs', output);
 } catch (error) {
   core.setFailed(error.message);
 }
