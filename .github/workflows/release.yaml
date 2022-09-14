@@ -180,8 +180,7 @@ jobs:
           fetch-depth: 0
       - name: Echo Git Logs
         run: |
-          echo ${{ needs.GitLogs.outputs.log }}
-          echo ${{ needs.GitLogs.outputs.markdownLog }}
+          echo ${{ steps.logs.outputs.log }}
 
   Release:
     needs: [GitLogs, Parse_Version]
@@ -212,7 +211,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Logs: ${{  steps.logs.outputs.log }}"
+                    "text": "Logs: ${{ steps.logs.outputs.log }}"
                   }
                 }
               ]
