@@ -16464,6 +16464,7 @@ async function run() {
       console.log(`afterCommit: ${afterCommit}`);
       core.debug(`beforeCommit: ${beforeCommit}`);
       core.debug(`afterCommit: ${afterCommit}`);
+      core.debug(github.context.payload);
       const diffString = `${afterCommit}...${beforeCommit}`;
 
       await exec.exec(
