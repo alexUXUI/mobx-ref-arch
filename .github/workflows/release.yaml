@@ -12,28 +12,28 @@ permissions:
   pull-requests: write
 
 jobs:
-  GitLogs:
-    runs-on: ubuntu-latest
-    name: A job to say hello
-    steps:
-      # To use this repository's private action,
-      # you must check out the repository
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Get the git log
-        uses: ./.github/actions/diff-log-parser # Uses an action in the root directory
-        id: logs
-      # Use the output from the `hello` step
-      - name: Get the logs
-        run: echo "The logs are ${{ steps.logs.outputs.log }}"
+  # GitLogs:
+  #   runs-on: ubuntu-latest
+  #   name: A job to say hello
+  #   steps:
+  #     # To use this repository's private action,
+  #     # you must check out the repository
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Get the git log
+  #       uses: ./.github/actions/diff-log-parser # Uses an action in the root directory
+  #       id: logs
+  #     # Use the output from the `hello` step
+  #     - name: Get the logs
+  #       run: echo "The logs are ${{ steps.logs.outputs.log }}"
 
-      - name: Echo previous tag
-        run: echo "The previous tag is ${{ steps.logs.outputs.previousTag }}"
+  #     - name: Echo previous tag
+  #       run: echo "The previous tag is ${{ steps.logs.outputs.previousTag }}"
 
-      - name: Echo markdownLog
-        run: echo "The markdown is ${{ steps.logs.outputs.markdownLog }}"
+  #     - name: Echo markdownLog
+  #       run: echo "The markdown is ${{ steps.logs.outputs.markdownLog }}"
 
   # Git_Log_JSON:
   #   runs-on: ubuntu-latest
@@ -170,20 +170,20 @@ jobs:
         run: |
           echo "::set-output name=version::$(npm pkg get version)"
 
-  EchoGitLogs:
-    needs: [GitLogs, Parse_Version]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Echo Git Logs
-        run: |
-          echo ${{ steps.logs.outputs.log }}
+  # EchoGitLogs:
+  #   needs: Parse_Version
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Echo Git Logs
+  #       run: |
+  #         echo ${{ steps.logs.outputs.log }}
 
   Release:
-    needs: [GitLogs, Parse_Version]
+    needs: Parse_Version
     runs-on: ubuntu-latest
 
     steps:
@@ -193,6 +193,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
       - name: Get the git log
         uses: ./.github/actions/diff-log-parser # Uses an action in the root directory
         id: logs
@@ -206,31 +207,31 @@ jobs:
       - name: Echo markdownLog
         run: echo "The markdown is ${{ steps.logs.outputs.markdownLog }}"
 
-      - name: Send custom JSON data to Slack workflow
-        id: slack
-      - uses: slackapi/slack-github-action@v1.18.0
-        with:
-          # For posting a rich message using Block Kit
-          # try it out here: https://app.slack.com/block-kit-builder/
-          payload: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|View the PR>"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Logs: ${{ steps.logs.outputs.log }}"
-                  }
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_HOOK }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      # - name: Send custom JSON data to Slack workflow
+      #   id: slack
+      # - uses: slackapi/slack-github-action@v1.18.0
+      #   with:
+      #     # For posting a rich message using Block Kit
+      #     # try it out here: https://app.slack.com/block-kit-builder/
+      #     payload: |
+      #       {
+      #         "blocks": [
+      #           {
+      #             "type": "section",
+      #             "text": {
+      #               "type": "mrkdwn",
+      #               "text": "<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|View the PR>"
+      #             }
+      #           },
+      #           {
+      #             "type": "section",
+      #             "text": {
+      #               "type": "mrkdwn",
+      #               "text": "Logs: ${{ steps.logs.outputs.log }}"
+      #             }
+      #           }
+      #         ]
+      #       }
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_HOOK }}
+      #     SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
