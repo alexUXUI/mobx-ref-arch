@@ -199,7 +199,7 @@ jobs:
         id: logs
       # Use the output from the `hello` step
       - name: Get the logs
-        run: echo "The logs are ${{ steps.logs.outputs.log }}"
+        run: echo "The logs are ${{ join(steps.logs.outputs.log, ', ') }}"
 
       - name: Echo previous tag
         run: echo "The previous tag is ${{ steps.logs.outputs.previousTag }}"
