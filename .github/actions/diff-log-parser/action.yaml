@@ -1,8 +1,15 @@
 name: 'Git log parser'
 description: 'Get the git log info'
 outputs:
-  logs: # id of output
+  log: # id of output
     description: 'The git commit logs'
+  latestTag: # id of output
+    description: 'The latest tag'
+  previousTag: # id of output
+    description: 'The previous tag'
+  markdownLog: # id of output
+    description: 'The markdown log'
+
 runs:
   using: 'node16'
   main: './dist/index.js'

@@ -26,8 +26,14 @@ jobs:
         uses: ./.github/actions/diff-log-parser # Uses an action in the root directory
         id: logs
       # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.logs }}"
+      - name: Get the logs
+        run: echo "The logs are ${{ steps.hello.outputs.logs }}"
+
+      - name: Echo previous tag
+        run: echo "The previous tag is ${{ steps.logs.outputs.previousTag }}"
+
+      - name: Echo markdownLog
+        run: echo "The markdown is ${{ steps.logs.outputs.markdownLog }}"
 
   # Git_Log_JSON:
   #   runs-on: ubuntu-latest
