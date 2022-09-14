@@ -189,24 +189,10 @@ jobs:
             {
               "blocks": [
                 {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "Deployed Version: ${{ fromJSON(needs.Parse_Version.outputs.version) }}"
-                  }
-                },
-                {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|View the PR>"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "${{ steps.hello.outputs.logs }}"
+                    "text": "You have a new request:\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*"
                   }
                 }
               ]
