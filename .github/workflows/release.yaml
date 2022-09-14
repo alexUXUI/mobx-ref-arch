@@ -208,6 +208,9 @@ jobs:
                   "text": {
                     "type": "mrkdwn",
                     "text": "${{ steps.logs.outputs.log }}"
+                  }
+                }
+              ]
             }
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_HOOK }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
