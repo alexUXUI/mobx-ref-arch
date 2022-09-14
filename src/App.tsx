@@ -4,14 +4,15 @@ import { CreateNote } from './features/createNote/createNote.component';
 import './App.css';
 
 // adds feature 1
-// adds feat a
+// adds feat a, iterates on a
 
-// adds feature b
+// adds feature b. iterates on feat b.
 
 // adds feat c
 // adds whatev
 
 // new commit
+// new release
 function App() {
   return (
     <RootStoreProvider>
