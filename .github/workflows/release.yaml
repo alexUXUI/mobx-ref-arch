@@ -158,17 +158,17 @@ jobs:
   #         GITHUB_CONTEXT: ${{ toJson(github) }}
   #       run: echo "$GITHUB_CONTEXT"
 
-  Parse_Version:
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.parse.outputs.version }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Parse package version
-        id: parse
-        run: |
-          echo "::set-output name=version::$(npm pkg get version)"
+  # Parse_Version:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     version: ${{ steps.parse.outputs.version }}
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Parse package version
+  #       id: parse
+  #       run: |
+  #         echo "::set-output name=version::$(npm pkg get version)"
 
   # EchoGitLogs:
   #   needs: Parse_Version
@@ -183,7 +183,7 @@ jobs:
   #         echo ${{ steps.logs.outputs.log }}
 
   Release:
-    needs: Parse_Version
+    # needs: Parse_Version
     runs-on: ubuntu-latest
 
     steps:
