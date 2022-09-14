@@ -12,7 +12,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  hello_world_job:
+  GitLogs:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
@@ -171,7 +171,7 @@ jobs:
           echo "::set-output name=version::$(npm pkg get version)"
 
   Release:
-    needs: [Parse_Version]
+    needs: [GitLogs, Parse_Version]
     runs-on: ubuntu-latest
 
     steps:
@@ -192,7 +192,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "You have a new request:\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*"
+                    "text": "<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|View the PR>"
                   }
                 }
               ]
