@@ -194,6 +194,13 @@ jobs:
                     "type": "mrkdwn",
                     "text": "<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|View the PR>"
                   }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ steps.logs.outputs.log }}"
+                  }
                 }
               ]
             }
