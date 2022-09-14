@@ -57,7 +57,13 @@ async function run() {
         },
       };
 
-      const diffString = `${latestTag}...${previousTag}`;
+      const beforeCommit = github.context.payload.before;
+      const afterCommit = github.context.payload.after;
+      console.log(`beforeCommit: ${beforeCommit}`);
+      console.log(`afterCommit: ${afterCommit}`);
+      core.debug(`beforeCommit: ${beforeCommit}`);
+      core.debug(`afterCommit: ${afterCommit}`);
+      const diffString = `${afterCommit}...${beforeCommit}`;
 
       await exec.exec(
         'git',
