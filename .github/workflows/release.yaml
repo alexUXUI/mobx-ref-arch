@@ -202,9 +202,15 @@ jobs:
                     "type": "mrkdwn",
                     "text": "<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|View the PR>"
                   }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ steps.logs.outputs.log }}"
+                  }
                 }
-                
               ]
             }
+        env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_HOOK }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
