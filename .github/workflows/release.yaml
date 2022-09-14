@@ -227,7 +227,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Logs"
+                    "text": "Logs: ${{ fromJSON(steps.logs.outputs.log) }}"
                   }
                 }
               ]
