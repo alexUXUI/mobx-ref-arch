@@ -16444,6 +16444,32 @@ async function run() {
     core.setOutput('log', textLog);
     core.setOutput('markdownLog', markdownLog);
     core.setOutput('commits', JSON.stringify(commits));
+
+    /// other appraoch
+
+    // run git log in exec
+    const generateLog = async () => {
+      let options = {};
+      let output = '';
+      options.listeners = {
+        stdout: (data) => {
+          console.log(data.toString());
+          output += data.toString();
+        },
+      };
+
+      const diffString = `${latestTag}...${previousTag}`;
+
+      await exec.exec(
+        'git',
+        ['log', `${diffString} --pretty=format:"%s"`],
+        options
+      );
+      core.setOutput('execLog', output);
+      console.log(output);
+    };
+
+    generateLog();
   } catch (error) {
     core.setFailed(error.message);
   }

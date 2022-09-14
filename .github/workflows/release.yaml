@@ -207,6 +207,9 @@ jobs:
       - name: Echo commits
         run: echo "The commits are ${{ steps.logs.outputs.commits }}"
 
+      - name: Echo execLog
+        run: echo "The execLog is ${{ steps.logs.outputs.execLog }}"
+
       - name: Send custom JSON data to Slack workflow
         id: slack
         uses: slackapi/slack-github-action@v1.18.0
