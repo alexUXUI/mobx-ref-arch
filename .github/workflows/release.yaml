@@ -170,6 +170,19 @@ jobs:
         run: |
           echo "::set-output name=version::$(npm pkg get version)"
 
+  EchoGitLogs:
+    needs: [GitLogs, Parse_Version]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Echo Git Logs
+        run: |
+          echo ${{ needs.GitLogs.outputs.log }}
+          echo ${{ needs.GitLogs.outputs.markdownLog }}
+
   Release:
     needs: [GitLogs, Parse_Version]
     runs-on: ubuntu-latest
