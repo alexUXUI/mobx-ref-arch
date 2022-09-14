@@ -227,7 +227,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Logs: ${{ steps.logs.outputs.log }}"
+                    "text": "Logs: ${{ format('Logs {0}', steps.logs.outputs.log) }}"
                   }
                 }
               ]
