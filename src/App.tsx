@@ -6,7 +6,7 @@ import './App.css';
 // adds feature 1
 // adds feat a, iterates on a
 
-// adds feature b
+// adds feature b. iterates on feat b.
 
 // adds feat c
 // adds whatev
