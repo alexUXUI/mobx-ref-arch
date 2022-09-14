@@ -27,7 +27,7 @@ jobs:
         id: logs
       # Use the output from the `hello` step
       - name: Get the logs
-        run: echo "The logs are ${{ steps.hello.outputs.logs }}"
+        run: echo "The logs are ${{ steps.logs.outputs.log }}"
 
       - name: Echo previous tag
         run: echo "The previous tag is ${{ steps.logs.outputs.previousTag }}"
@@ -207,7 +207,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ steps.hello.outputs.logs }}"
+                    "text": "${{ steps.logs.outputs.log }}"
             }
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_HOOK }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
