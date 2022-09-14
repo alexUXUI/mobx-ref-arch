@@ -68,9 +68,10 @@ async function run() {
 
       await exec.exec(
         'git',
-        ['log', `${diffString} --pretty=format:"%s"`],
+        ['log', '--pretty=format:%h - %an - %s', diffString],
         options
       );
+
       core.setOutput('execLog', output);
       console.log(output);
     };
