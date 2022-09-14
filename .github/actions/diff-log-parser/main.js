@@ -42,6 +42,7 @@ async function run() {
     core.setOutput('latestTag', latestTag);
     core.setOutput('log', textLog);
     core.setOutput('markdownLog', markdownLog);
+    core.setOutput('commits', commits);
   } catch (error) {
     core.setFailed(error.message);
   }

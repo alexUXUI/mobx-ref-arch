@@ -204,8 +204,8 @@ jobs:
       - name: Echo previous tag
         run: echo "The previous tag is ${{ steps.logs.outputs.previousTag }}"
 
-      - name: Echo markdownLog
-        run: echo "The markdown is ${{ steps.logs.outputs.markdownLog }}"
+      - name: Echo commits
+        run: echo "The markdown is ${{ steps.logs.outputs.commits }}"
 
       - name: Send custom JSON data to Slack workflow
         id: slack
@@ -227,7 +227,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ join(steps.logs.outputs.markdownLog, ', ') }}"
+                    "text": "${{ join(steps.logs.outputs.commits, ', ') }}"
                   }
                 }
               ]

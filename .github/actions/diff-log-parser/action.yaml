@@ -9,6 +9,8 @@ outputs:
     description: 'The previous tag'
   markdownLog: # id of output
     description: 'The markdown log'
+  commits: # id of output
+    description: 'The commits'
 
 runs:
   using: 'node16'
