@@ -24,10 +24,10 @@ jobs:
           fetch-depth: 0
       - name: Get the git log
         uses: ./.github/actions/diff-log-parser # Uses an action in the root directory
-        id: hello
+        id: logs
       # Use the output from the `hello` step
       - name: Get the logs
-        run: echo "The logs are ${{ steps.hello.outputs.log }}"
+        run: echo "The logs are ${{ steps.logs.outputs.log }}"
 
       - name: Echo previous tag
         run: echo "The previous tag is ${{ steps.logs.outputs.previousTag }}"
