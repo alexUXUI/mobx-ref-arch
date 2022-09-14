@@ -201,8 +201,8 @@ jobs:
       - name: Get the logs
         run: echo "The logs are ${{ steps.logs.outputs.log }}"
 
-      # - name: Echo previous tag
-      #   run: echo "The previous tag is ${{ steps.logs.outputs.previousTag }}"
+      - name: Echo previous tag
+        run: echo "The previous tag is ${{ steps.logs.outputs.previousTag }}"
 
       # - name: Echo markdownLog
       #   run: echo "The markdown is ${{ steps.logs.outputs.markdownLog }}"
