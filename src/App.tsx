@@ -10,6 +10,8 @@ import './App.css';
 
 // adds feat c
 // adds whatev
+
+// new commit
 function App() {
   return (
     <RootStoreProvider>
