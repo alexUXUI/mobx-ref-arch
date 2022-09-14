@@ -9,7 +9,9 @@ import './App.css';
 // adds feature b
 
 // adds feat c
+// adds whatev
 
+// new commit
 function App() {
   return (
     <RootStoreProvider>
