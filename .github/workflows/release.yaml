@@ -170,47 +170,47 @@ jobs:
         run: |
           echo "::set-output name=version::$(npm pkg get version)"
 
-  Release:
-    needs: [Parse_Version]
-    runs-on: ubuntu-latest
+  # Release:
+  #   needs: [Parse_Version]
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: '0'
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: '0'
 
-        name: Send custom JSON data to Slack workflow
-        id: slack
-      - uses: slackapi/slack-github-action@v1.18.0
-        with:
-          # For posting a rich message using Block Kit
-          # try it out here: https://app.slack.com/block-kit-builder/
-          payload: |
-            {
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "Deployed Version: ${{ fromJSON(needs.Parse_Version.outputs.version) }}"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|View the PR>"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "${{ steps.hello.outputs.logs }}"
-                  }
-                }
-              ]
-            }
-          env:
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_HOOK }}
-            SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+  #       name: Send custom JSON data to Slack workflow
+  #       id: slack
+  #     - uses: slackapi/slack-github-action@v1.18.0
+  #       with:
+  #         # For posting a rich message using Block Kit
+  #         # try it out here: https://app.slack.com/block-kit-builder/
+  #         payload: |
+  #           {
+  #             "blocks": [
+  #               {
+  #                 "type": "header",
+  #                 "text": {
+  #                   "type": "plain_text",
+  #                   "text": "Deployed Version: ${{ fromJSON(needs.Parse_Version.outputs.version) }}"
+  #                 }
+  #               },
+  #               {
+  #                 "type": "section",
+  #                 "text": {
+  #                   "type": "mrkdwn",
+  #                   "text": "<${{ github.event.pull_request.html_url || github.event.head_commit.url }}|View the PR>"
+  #                 }
+  #               },
+  #               {
+  #                 "type": "section",
+  #                 "text": {
+  #                   "type": "mrkdwn",
+  #                   "text": "${{ steps.hello.outputs.logs }}"
+  #                 }
+  #               }
+  #             ]
+  #           }
+  #         env:
+  #           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_HOOK }}
+  #           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
