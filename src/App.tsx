@@ -13,6 +13,8 @@ import './App.css';
 
 // new commit
 // new release
+
+// some feature
 function App() {
   return (
     <RootStoreProvider>
