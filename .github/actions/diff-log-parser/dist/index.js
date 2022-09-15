@@ -16462,6 +16462,10 @@ async function run() {
       const afterCommit = github.context.payload.after;
       console.log(`beforeCommit: ${beforeCommit}`);
       console.log(`afterCommit: ${afterCommit}`);
+      console.log(
+        `github.context.payload: ${JSON.stringify(github.context.payload)}`
+      );
+      console.log(github.context);
       core.debug(`beforeCommit: ${beforeCommit}`);
       core.debug(`afterCommit: ${afterCommit}`);
       core.debug(github.context.payload);
