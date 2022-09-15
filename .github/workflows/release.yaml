@@ -194,6 +194,23 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Get branch name (merge)
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+          echo "THIS IS NOT A PR"
+
+      - name: Get branch name (pull request)
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
+          echo "THIS IS A PR"
+
+      - name: Debug
+        run: echo ${{ env.BRANCH_NAME }}
+
       - name: Get the git log
         uses: ./.github/actions/diff-log-parser # Uses an action in the root directory
         id: logs
