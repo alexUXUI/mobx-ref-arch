@@ -42,7 +42,7 @@ async function run() {
     core.setOutput('latestTag', latestTag);
     core.setOutput('log', textLog);
     core.setOutput('markdownLog', markdownLog);
-    core.setOutput('commits', JSON.stringify(commits));
+    core.setOutput('commits', JSON.stringify(github.context.payload.commits));
 
     /// other appraoch
 
