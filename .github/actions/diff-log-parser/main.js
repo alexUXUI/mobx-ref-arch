@@ -70,6 +70,9 @@ async function run() {
       core.debug(github.context.payload);
       const diffString = `${beforeCommit}..${afterCommit}`;
 
+      console.log('COMMITS');
+      console.log(github.context.payload.commits);
+
       await exec.exec(
         'git',
         ['log', '--pretty=format:%h - %an - %s', diffString],
