@@ -68,6 +68,13 @@ jobs:
       - name: Echo changelog
         run: echo "The changelog is ${{ steps.diff.outputs.changelog }}"
 
+      - name: git log in github env
+        run: |
+          echo "GIT_LOG=$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }})" >> $GITHUB_ENV
+
+      - name: Debug BABY
+        run: echo ${{ env.GIT_LOG }}
+
       - name: Echo diff
         run: echo "The diff is ${{ steps.diff.outputs.diff }}"
 
@@ -82,7 +89,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "```${{ steps.diff.outputs.changelog }}``` - <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|link>}}"
+                    "text": "${{ steps.diff.outputs.changelog }}"
                   }
                 }
               ]
