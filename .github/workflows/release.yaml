@@ -56,18 +56,6 @@ jobs:
         run: |
           echo "::set-output name=after::$(git rev-parse HEAD)"
 
-      - name: Get the diff
-        id: diff
-        run: |
-          export CHANGELOG="$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }})"
-          CHANGELOG="${CHANGELOG//'%'/'%25'}"
-          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
-          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
-          echo "::set-output name=changelog::$(echo "$CHANGELOG")"
-
-      - name: Echo changelog
-        run: echo "The changelog is ${{ steps.diff.outputs.changelog }}"
-
       - name: git log in github env
         run: |
           MY_STRING=$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }} | sed -e ':a;N;$!ba;s/\n/\\n/g')
