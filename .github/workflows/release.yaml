@@ -65,6 +65,9 @@ jobs:
           CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
           echo "::set-output name=changelog::$(echo "$CHANGELOG")"
 
+      - name: Echo changelog
+        run: echo "The changelog is ${{ steps.diff.outputs.changelog }}"
+
       - name: Echo diff
         run: echo "The diff is ${{ steps.diff.outputs.diff }}"
 
