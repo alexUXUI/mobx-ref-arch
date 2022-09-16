@@ -46,9 +46,6 @@ jobs:
       # - name: Echo commits
       #   run: echo "The commits are ${{ steps.logs.outputs.commits }}"
 
-      # - name: Echo execLog
-      #   run: echo "The execLog is ${{ steps.logs.outputs.execLog }}"
-
       - name: Get before commit
         id: before
         run: |
