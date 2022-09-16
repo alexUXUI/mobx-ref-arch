@@ -90,7 +90,7 @@ jobs:
                 {
                   "type": "section",
                   "text": {
-                    "type": "text",
+                    "type": "mrkdwn",
                     "text": "${{ env.MY_STRING }}"
                   }
                 }
