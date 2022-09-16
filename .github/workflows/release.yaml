@@ -45,11 +45,6 @@ jobs:
       #   uses: ./.github/actions/diff-log-parser # Uses an action in the root directory
       #   id: logs
       # # Use the output from the `hello` step
-      # # - name: Get the logs
-      # #   run: echo "The logs are ${{ join(steps.logs.outputs.log, ', ') }}"
-
-      # # - name: Echo previous tag
-      # #   run: echo "The previous tag is ${{ steps.logs.outputs.previousTag }}"
 
       # - name: Echo commits
       #   run: echo "The commits are ${{ steps.logs.outputs.commits }}"
