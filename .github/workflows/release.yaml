@@ -211,21 +211,21 @@ jobs:
       - name: Debug
         run: echo ${{ env.BRANCH_NAME }}
 
-      - name: Get the git log
-        uses: ./.github/actions/diff-log-parser # Uses an action in the root directory
-        id: logs
-      # Use the output from the `hello` step
-      # - name: Get the logs
-      #   run: echo "The logs are ${{ join(steps.logs.outputs.log, ', ') }}"
+      # - name: Get the git log
+      #   uses: ./.github/actions/diff-log-parser # Uses an action in the root directory
+      #   id: logs
+      # # Use the output from the `hello` step
+      # # - name: Get the logs
+      # #   run: echo "The logs are ${{ join(steps.logs.outputs.log, ', ') }}"
 
-      # - name: Echo previous tag
-      #   run: echo "The previous tag is ${{ steps.logs.outputs.previousTag }}"
+      # # - name: Echo previous tag
+      # #   run: echo "The previous tag is ${{ steps.logs.outputs.previousTag }}"
 
-      - name: Echo commits
-        run: echo "The commits are ${{ steps.logs.outputs.commits }}"
+      # - name: Echo commits
+      #   run: echo "The commits are ${{ steps.logs.outputs.commits }}"
 
-      - name: Echo execLog
-        run: echo "The execLog is ${{ steps.logs.outputs.execLog }}"
+      # - name: Echo execLog
+      #   run: echo "The execLog is ${{ steps.logs.outputs.execLog }}"
 
       - name: Get before commit
         id: before
@@ -258,7 +258,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ steps.diff.outputs.diff  }} \n <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|link>"
+                    "text": "${{ steps.diff.outputs.diff  }} - <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|link>"
                   }
                 }
               ]
