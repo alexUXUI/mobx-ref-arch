@@ -16406,43 +16406,43 @@ const simpleGit = __nccwpck_require__(3828);
 
 async function run() {
   try {
-    const git = simpleGit();
+    // const git = simpleGit();
 
-    const tags = await git.tags();
+    // const tags = await git.tags();
 
-    const previousTag =
-      tags.all.length < 2 ? undefined : tags.all[tags.all.length - 2];
-    const latestTag =
-      tags.all.length < 1 ? undefined : tags.all[tags.all.length - 1];
+    // const previousTag =
+    //   tags.all.length < 2 ? undefined : tags.all[tags.all.length - 2];
+    // const latestTag =
+    //   tags.all.length < 1 ? undefined : tags.all[tags.all.length - 1];
 
-    const commits = await git.log({
-      from: previousTag,
-      to: latestTag,
-      format: {
-        abbrev: '%h',
-        author: '@%an',
-        message: '%s',
-      },
-      splitter: '\n',
-      multiLine: false,
-    });
+    // const commits = await git.log({
+    //   from: previousTag,
+    //   to: latestTag,
+    //   format: {
+    //     abbrev: '%h',
+    //     author: '@%an',
+    //     message: '%s',
+    //   },
+    //   splitter: '\n',
+    //   multiLine: false,
+    // });
 
-    let textLog = '';
-    let markdownLog = '';
+    // let textLog = '';
+    // let markdownLog = '';
 
-    for (const commit of commits.all) {
-      textLog += `${commit.abbrev} - ${commit.author} - ${commit.message}\n`;
-      markdownLog += `[\`${commit.abbrev}\`](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/commit/${commit.abbrev}) ${commit.author} - ${commit.message}\n`;
-    }
+    // for (const commit of commits.all) {
+    //   textLog += `${commit.abbrev} - ${commit.author} - ${commit.message}\n`;
+    //   markdownLog += `[\`${commit.abbrev}\`](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/commit/${commit.abbrev}) ${commit.author} - ${commit.message}\n`;
+    // }
 
-    core.info(`previousTag: ${previousTag}`);
-    core.info(`latestTag: ${latestTag}`);
-    core.info(textLog);
+    // core.info(`previousTag: ${previousTag}`);
+    // core.info(`latestTag: ${latestTag}`);
+    // core.info(textLog);
 
-    core.setOutput('previousTag', previousTag);
-    core.setOutput('latestTag', latestTag);
-    core.setOutput('log', textLog);
-    core.setOutput('markdownLog', markdownLog);
+    // core.setOutput('previousTag', previousTag);
+    // core.setOutput('latestTag', latestTag);
+    // core.setOutput('log', textLog);
+    // core.setOutput('markdownLog', markdownLog);
     core.setOutput('commits', JSON.stringify(github.context.payload.commits));
 
     /// other appraoch
@@ -16462,9 +16462,7 @@ async function run() {
       const afterCommit = github.context.payload.after;
       console.log(`beforeCommit: ${beforeCommit}`);
       console.log(`afterCommit: ${afterCommit}`);
-      console.log(
-        `github.context.payload: ${JSON.stringify(github.context.payload)}`
-      );
+      console.log(`github.context.payload: ${github.context.payload}`);
       console.log(github.context);
       core.debug(`beforeCommit: ${beforeCommit}`);
       core.debug(`afterCommit: ${afterCommit}`);
@@ -16496,6 +16494,8 @@ async function run() {
 }
 
 run();
+
+// superifical change
 
 // try {
 //   // `who-to-greet` input defined in action metadata file

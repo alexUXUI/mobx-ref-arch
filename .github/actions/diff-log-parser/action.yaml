@@ -1,14 +1,14 @@
 name: 'Git log parser'
 description: 'Get the git log info'
 outputs:
-  log: # id of output
-    description: 'The git commit logs'
-  latestTag: # id of output
-    description: 'The latest tag'
-  previousTag: # id of output
-    description: 'The previous tag'
-  markdownLog: # id of output
-    description: 'The markdown log'
+  # log: # id of output
+  #   description: 'The git commit logs'
+  # latestTag: # id of output
+  #   description: 'The latest tag'
+  # previousTag: # id of output
+  #   description: 'The previous tag'
+  # markdownLog: # id of output
+  #   description: 'The markdown log'
   commits: # id of output
     description: 'The commits'
   execLog: # id of output
