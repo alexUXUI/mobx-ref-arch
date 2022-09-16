@@ -70,7 +70,7 @@ jobs:
       - name: Get the diff
         id: diff
         run: |
-          echo "::set-output name=diff::$(git log ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }} --raw)"
+          echo "::set-output name=diff::$(git log ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }} --pretty=format:'%B' )"
 
       - name: Echo diff
         run: echo "The diff is ${{ steps.diff.outputs.diff }}"
