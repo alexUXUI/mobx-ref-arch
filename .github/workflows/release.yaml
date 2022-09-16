@@ -76,10 +76,6 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
           echo "GIT_LOG=" >> $GITHUB_ENV
 
-      - name: Echo diff WOOHOO
-        run: |
-          echo "The string is: ${{ env.MY_STRING }}"
-
       - name: Send custom JSON data to Slack workflow
         id: slack
         uses: slackapi/slack-github-action@v1.18.0
