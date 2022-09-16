@@ -258,7 +258,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ steps.diff.outputs.diff  }} - <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|link>"
+                    "text": "${{ steps.diff.outputs.diff  }} - <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|link> commits: ${{ join(github.event.commits, ', ') }}"
                   }
                 }
               ]
