@@ -75,7 +75,6 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v1.18.0
         with:
-          # try it out here https://app.slack.com/block-kit-builder/
           payload: |
             {
               "blocks": [
@@ -83,7 +82,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "diff: ${{ steps.diff.outputs.changelog }} - <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|link> commits: ${{ join(github.event.commits, ', ') }}"
+                    "text": "```${{ steps.diff.outputs.changelog }}``` - <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|link>}}"
                   }
                 }
               ]
