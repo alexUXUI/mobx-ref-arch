@@ -247,7 +247,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ steps.logs.outputs.commits }}"
+                    "text": "${{ join(steps.logs.outputs.commits, ' ,') }}"
                   }
                 }
               ]

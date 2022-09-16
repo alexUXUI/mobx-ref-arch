@@ -4,7 +4,11 @@ const exec = require('@actions/exec');
 
 async function run() {
   try {
-    core.setOutput('commits', JSON.stringify(github.context.payload.commits));
+    core.setOutput('commits', github.context.payload.commits);
+
+    const beforeCommit = github.context.payload.before;
+    const afterCommit = github.context.payload.after;
+    const diffString = `${beforeCommit}..${afterCommit}`;
 
     const generateLog = async () => {
       let options = {};
@@ -15,10 +19,6 @@ async function run() {
           output += data.toString();
         },
       };
-
-      const beforeCommit = github.context.payload.before;
-      const afterCommit = github.context.payload.after;
-      const diffString = `${beforeCommit}..${afterCommit}`;
 
       console.log('COMMITS');
       console.log(github.context.payload.commits);
