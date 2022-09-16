@@ -91,7 +91,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ steps.diff.outputs.changelog }}"
+                    "text": "${{ env.MY_STRING }}"
                   }
                 }
               ]
