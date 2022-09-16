@@ -30,6 +30,7 @@ jobs:
         id: after
         run: |
           echo "::set-output name=after::$(git rev-parse HEAD)"
+
       - name: git log in github env
         run: |
           MY_STRING=$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }} | sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//' | sed -e 's/"/\\"/g' | sed -e ':a;N;$!ba;s/\n/\\n/g')
@@ -37,6 +38,10 @@ jobs:
           echo "$MY_STRING" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           echo "GIT_LOG=" >> $GITHUB_ENV
+
+      - name: changelog
+        run: |
+          echo "::set-output name=changelog::$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }} | sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//' | sed -e 's/"/\\"/g' | sed -e ':a;N;$!ba;s/\n/\\n/g')"
 
       - name: Send custom JSON data to Slack workflow
         id: slack
@@ -50,6 +55,13 @@ jobs:
                   "text": {
                     "type": "mrkdwn",
                     "text": "${{ env.MY_STRING }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ steps.changelog.outputs.changelog }}"
                   }
                 }
               ]
