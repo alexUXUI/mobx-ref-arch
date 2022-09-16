@@ -70,13 +70,18 @@ jobs:
 
       - name: git log in github env
         run: |
-          echo "GIT_LOG=$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }})" >> $GITHUB_ENV
+          MY_STRING=$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }})
+          echo "MY_STRING<<EOF" >> $GITHUB_ENV
+          echo "$MY_STRING" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "GIT_LOG=" >> $GITHUB_ENV
 
-      - name: Debug BABY
-        run: echo ${{ env.GIT_LOG }}
+      - name: Debug MY_STRING from github env
+        run: echo $MY_STRING
 
-      - name: Echo diff
-        run: echo "The diff is ${{ steps.diff.outputs.diff }}"
+      - name: Echo diff WOOHOO
+        run: |
+          echo "The string is: ${{ env.MY_STRING }}"
 
       - name: Send custom JSON data to Slack workflow
         id: slack
