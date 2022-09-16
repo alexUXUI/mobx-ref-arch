@@ -12,7 +12,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  Set_Variables:
+  Release:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,11 +30,6 @@ jobs:
         id: after
         run: |
           echo "::set-output name=after::$(git rev-parse HEAD)"
-
-  Release:
-    runs-on: ubuntu-latest
-
-    steps:
       - name: git log in github env
         run: |
           MY_STRING=$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }} | sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//' | sed -e 's/"/\\"/g' | sed -e ':a;N;$!ba;s/\n/\\n/g')
