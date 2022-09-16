@@ -63,7 +63,13 @@ jobs:
         id: diff
         run: |
           LOG_STRING=$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }})
-          echo "$LOG_STRING" >> $GITHUB_ENV
+
+          MY_STRING=$(cat << EOF
+            git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }}
+          )
+          echo "MY_STRING<<EOF" >> $GITHUB_ENV
+          echo "$MY_STRING" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Echo diff
         run: echo "The diff is ${{ steps.diff.outputs.diff }}"
