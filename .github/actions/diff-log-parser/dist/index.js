@@ -10980,14 +10980,13 @@ async function run() {
       console.log('COMMITS');
       console.log(github.context.payload.commits);
 
-      github.context.payload.commits.forEach((commit) => {
-        console.log('commit 🔥');
-        console.log(commit);
-      });
+      let commitString = '';
+
+      github.context.payload.commits.forEach((commit) => {});
 
       await exec.exec(
         'git',
-        ['log', '--pretty=format:%s', diffString],
+        ['log', '--pretty=format:"%s %n %b"', diffString],
         options
       );
 
