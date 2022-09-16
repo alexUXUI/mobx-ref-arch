@@ -30,7 +30,7 @@ async function run() {
 
       await exec.exec(
         'git',
-        ['log', '--pretty=format:%s', diffString],
+        ['log', '--pretty=format:"%s %n %b"', diffString],
         options
       );
 
