@@ -75,7 +75,6 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v1.18.0
         with:
-          # try it out here https://app.slack.com/block-kit-builder/
           payload: |
             {
               "blocks": [
