@@ -62,7 +62,6 @@ jobs:
       - name: Get the diff
         id: diff
         run: |
-        run: |
           LOG_STRING=$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }})
           echo "$LOG_STRING" >> $GITHUB_ENV
 
