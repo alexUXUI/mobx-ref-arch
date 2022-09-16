@@ -59,15 +59,11 @@ jobs:
       - name: Get the diff
         id: diff
         run: |
-          LOG_STRING=$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }})
-
-          MY_STRING=$(cat << EOF
-            git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }}
-            EOF
-          )
-          echo "MY_STRING<<EOF" >> $GITHUB_ENV
-          echo "$MY_STRING" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          export CHANGELOG="$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }})"
+          CHANGELOG="${CHANGELOG//'%'/'%25'}"
+          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+          echo "::set-output name=changelog::$(echo "$CHANGELOG")"
 
       - name: Echo diff
         run: echo "The diff is ${{ steps.diff.outputs.diff }}"
@@ -84,7 +80,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ env.MY_STRING  }} - <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|link> commits: ${{ join(github.event.commits, ', ') }}"
+                    "text": "diff: ${{ steps.diff.outputs.changelog }} - <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|link> commits: ${{ join(github.event.commits, ', ') }}"
                   }
                 }
               ]
