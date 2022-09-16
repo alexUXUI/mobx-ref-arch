@@ -35,21 +35,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Get before commit
-        id: before
-        run: |
-          echo "::set-output name=before::$(git rev-parse HEAD~1)"
-
-      - name: Get after commit
-        id: after
-        run: |
-          echo "::set-output name=after::$(git rev-parse HEAD)"
-
       - name: git log in github env
         run: |
           MY_STRING=$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }} | sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//' | sed -e 's/"/\\"/g' | sed -e ':a;N;$!ba;s/\n/\\n/g')
