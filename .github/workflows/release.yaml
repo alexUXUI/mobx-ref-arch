@@ -21,23 +21,19 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get branch name (merge)
-        if: github.event_name != 'pull_request'
-        shell: bash
+      - name: Get before commit
+        id: before
         run: |
-          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
-          echo "THIS IS NOT A PR"
+          echo "::set-output name=before::$(git rev-parse HEAD~1)"
 
-      - name: Get branch name (pull request)
-        if: github.event_name == 'pull_request'
-        shell: bash
+      - name: Get after commit
+        id: after
         run: |
-          echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
-          echo "THIS IS A PR"
+          echo "::set-output name=after::$(git rev-parse HEAD)"
 
       - name: git log in github env
         run: |
-          MY_STRING=$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }} | sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//' | sed -e 's/"/\\"/g' | sed -e ':a;N;$!ba;s/\n/\\n/g')
+          MY_STRING=$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }} | sed -e ':a;N;$!ba;s/\n/\\n/g')
           echo "MY_STRING<<EOF" >> $GITHUB_ENV
           echo "$MY_STRING" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
