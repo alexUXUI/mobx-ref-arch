@@ -227,6 +227,24 @@ jobs:
       - name: Echo execLog
         run: echo "The execLog is ${{ steps.logs.outputs.execLog }}"
 
+      - name: Get before commit
+        id: before
+        run: |
+          echo "::set-output name=before::$(git rev-parse HEAD~1)"
+
+      - name: Get after commit
+        id: after
+        run: |
+          echo "::set-output name=after::$(git rev-parse HEAD)"
+
+      - name: Get the diff
+        id: diff
+        run: |
+          echo "::set-output name=diff::$(git log ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }})"
+
+      - name: Echo diff
+        run: echo "The diff is ${{ steps.diff.outputs.diff }}"
+
       - name: Send custom JSON data to Slack workflow
         id: slack
         uses: slackapi/slack-github-action@v1.18.0
@@ -247,7 +265,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ steps.logs.outputs.commits }}"
+                    "text": "${{ steps.diff.outputs.diff  }}"
                   }
                 }
               ]
