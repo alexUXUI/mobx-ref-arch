@@ -62,7 +62,7 @@ jobs:
       - name: Get the diff
         id: diff
         run: |
-          echo "::set-output name=diff::$(git log ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }} --pretty=format:'%B' | sed ':b;N;$!bb;s/\n/,/g' )"
+          echo "::set-output name=diff::$(git log ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }} --pretty=format:'%B' |  sed -e ':a' -e 'N;$!ba' -e 's/\n/%0A/g' )"
 
       - name: Echo diff
         run: echo "The diff is ${{ steps.diff.outputs.diff }}"
