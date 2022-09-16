@@ -13,12 +13,9 @@ permissions:
 
 jobs:
   Release:
-    # needs: Parse_Version
     runs-on: ubuntu-latest
 
     steps:
-      # To use this repository's private action,
-      # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -45,11 +42,6 @@ jobs:
       #   uses: ./.github/actions/diff-log-parser # Uses an action in the root directory
       #   id: logs
       # # Use the output from the `hello` step
-      # # - name: Get the logs
-      # #   run: echo "The logs are ${{ join(steps.logs.outputs.log, ', ') }}"
-
-      # # - name: Echo previous tag
-      # #   run: echo "The previous tag is ${{ steps.logs.outputs.previousTag }}"
 
       # - name: Echo commits
       #   run: echo "The commits are ${{ steps.logs.outputs.commits }}"
@@ -70,7 +62,7 @@ jobs:
       - name: Get the diff
         id: diff
         run: |
-          echo "::set-output name=diff::$(git log ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }} --raw)"
+          echo "::set-output name=diff::$(git log ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }} --pretty=format:'%B' )"
 
       - name: Echo diff
         run: echo "The diff is ${{ steps.diff.outputs.diff }}"
