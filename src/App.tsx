@@ -12,5 +12,4 @@ function App() {
     </RootStoreProvider>
   );
 }
-//
 export default App;
