@@ -3,8 +3,6 @@ import { NotesTable } from './features/notesTable/notesTable.component';
 import { CreateNote } from './features/createNote/createNote.component';
 import './App.css';
 
-// adds feature b. iterates on feat b.
-
 // adds feat c
 // adds whatev
 
