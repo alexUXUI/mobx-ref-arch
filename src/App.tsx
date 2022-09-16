@@ -12,5 +12,5 @@ function App() {
     </RootStoreProvider>
   );
 }
-// 2
+// 2fawef
 export default App;
