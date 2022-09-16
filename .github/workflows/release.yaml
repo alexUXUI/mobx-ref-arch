@@ -66,6 +66,7 @@ jobs:
 
           MY_STRING=$(cat << EOF
             git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }}
+            EOF
           )
           echo "MY_STRING<<EOF" >> $GITHUB_ENV
           echo "$MY_STRING" >> $GITHUB_ENV
