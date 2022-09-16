@@ -4,7 +4,7 @@ const exec = require('@actions/exec');
 
 async function run() {
   try {
-    core.setOutput('commits', github.context.payload.commits);
+    // core.setOutput('commits', github.context.payload.commits);
 
     const beforeCommit = github.context.payload.before;
     const afterCommit = github.context.payload.after;
@@ -42,6 +42,8 @@ async function run() {
       );
       core.debug('execLog');
       core.debug(output);
+
+      core.setOutput('commits', output);
     };
 
     generateLog();
