@@ -76,9 +76,6 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
           echo "GIT_LOG=" >> $GITHUB_ENV
 
-      - name: Debug MY_STRING from github env
-        run: echo $MY_STRING
-
       - name: Echo diff WOOHOO
         run: |
           echo "The string is: ${{ env.MY_STRING }}"
