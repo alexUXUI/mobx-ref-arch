@@ -39,14 +39,6 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
           echo "GIT_LOG=" >> $GITHUB_ENV
 
-      - name: changelog
-        run: |
-          echo "::set-output name=changelog::$(git log --pretty=format:"%B" ${{ steps.before.outputs.before }}..${{ steps.after.outputs.after }} | sed -e 's/^[[:space:]]*//' | sed -e 's/[[:space:]]*$//' | sed -e 's/"/\\"/g' | sed -e ':a;N;$!ba;s/\n/\\n/g')"
-
-      - name: debug changelog
-        run: |
-          echo ${{ steps.changelog.outputs.changelog }}
-
       - name: Send custom JSON data to Slack workflow
         id: slack
         uses: slackapi/slack-github-action@v1.18.0
@@ -58,14 +50,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ env.MY_STRING }}"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "${{ steps.changelog.outputs.changelog }}"
+                    "text": "${{ env.MY_STRING }} - <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|link>"
                   }
                 }
               ]
