@@ -14,6 +14,7 @@ adds feature two
 adds feature one
 
 change one
+change two
 
 In the project directory, you can run:
 
