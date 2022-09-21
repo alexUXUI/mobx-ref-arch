@@ -10,6 +10,8 @@ docs change
 
 updates readme
 
+adds feature one
+
 In the project directory, you can run:
 
 ### `npm start`
