@@ -9,6 +9,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 docs change
 
 updates readme
+adds feature two
+
+adds feature one
 
 In the project directory, you can run:
 
